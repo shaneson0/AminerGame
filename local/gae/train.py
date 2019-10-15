@@ -163,10 +163,10 @@ def gae_for_na(name, localTest=False):
 
     emb_norm = normalize_vectors(emb)
     clusters_pred = clustering(emb_norm, num_clusters=NumberOfCluster)
-    # prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, labels)
-    # print('pairwise precision', '{:.5f}'.format(prec),
-    #       'recall', '{:.5f}'.format(rec),
-    #       'f1', '{:.5f}'.format(f1))
+    prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, labels)
+    print('pairwise precision', '{:.5f}'.format(prec),
+          'recall', '{:.5f}'.format(rec),
+          'f1', '{:.5f}'.format(f1))
     # tSNEAnanlyse(emb, clusters_pred)
     res =ConstructRes(Ids, clusters_pred, NumberOfCluster, name)
     Res[name] = res
