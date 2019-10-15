@@ -262,4 +262,5 @@ if __name__ == '__main__':
     # cur_metric, num_nodes, n_clusters = gae_for_na('heng_li')
     # print(cur_metric, num_nodes, n_clusters)
     # gae_for_na('heng_li', localTest=True)
-    main()
+    gae_for_na('li_guo', localTest=True)
+    # main()
