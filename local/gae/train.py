@@ -49,7 +49,7 @@ start_time = time.time()
 Res = {}
 
 
-def gae_for_na(name):
+def gae_for_na(name, localTest=False):
     """
     train and evaluate disambiguation results for a specific name
     :param name:  author name
@@ -159,16 +159,17 @@ def gae_for_na(name):
     n_clusters = len(set(labels))
     emb_norm = normalize_vectors(emb)
     clusters_pred = clustering(emb_norm, num_clusters=NumberOfCluster)
-    # prec, rec, f1 =  pairwise_precision_recall_f1(clusters_pred, labels)
+    # prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, labels)
     # print('pairwise precision', '{:.5f}'.format(prec),
     #       'recall', '{:.5f}'.format(rec),
     #       'f1', '{:.5f}'.format(f1))
     # tSNEAnanlyse(emb, clusters_pred)
     res =ConstructRes(Ids, clusters_pred, NumberOfCluster, name)
     Res[name] = res
-    # print(Res)
 
-    # PCAAnanlyse(emb, clusters_pred)
+    # print(Res)
+    if localTest:
+        tSNEAnanlyse(emb, clusters_pred, savepath=join(settings.OUT_DIR, "pic", "%s.jpg"%(name)))
     # return [prec, rec, f1], num_nodes, NumberOfCluster
 
 
@@ -253,8 +254,8 @@ def tSNEAnanlyse(emb, labels, savepath=False):
 
 
 if __name__ == '__main__':
-    # gae_for_na('hongbin_liang')
     # gae_for_na('j_yu')
     # cur_metric, num_nodes, n_clusters = gae_for_na('heng_li')
     # print(cur_metric, num_nodes, n_clusters)
-    main()
+    gae_for_na('heng_li')
+    # main()
