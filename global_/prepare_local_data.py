@@ -12,7 +12,7 @@ IDF_THRESHOLD = 32  # small data
 # IDF_THRESHOLD = 10
 
 
-def dump_inter_emb():
+def dump_train_emb():
     """
     dump hidden embedding via trained global model for local model to use
     """
@@ -22,7 +22,7 @@ def dump_inter_emb():
     lc_inter = LMDBClient(INTER_LMDB_NAME)
     global_model = GlobalTripletModel(data_scale=1000000)
     trained_global_model = global_model.load_triplets_model()
-    name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_test.json')
+    name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_train.json')
     for name in name_to_pubs_test:
         print('name', name)
         name_data = name_to_pubs_test[name]
@@ -70,6 +70,7 @@ def dump_test_emb():
         inter_embs = get_hidden_output(trained_global_model, embs_input)
         for i, pid in enumerate(pids):
             lc_inter.set(pid, inter_embs[i])
+
 
 
 
@@ -136,6 +137,7 @@ def gen_local_data(idf_threshold=10):
 
 if __name__ == '__main__':
     # dump_inter_emb()
+    dump_train_emb()
     dump_test_emb()
     gen_local_data(idf_threshold=IDF_THRESHOLD)
     print('done')
