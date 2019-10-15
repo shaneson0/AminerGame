@@ -54,6 +54,8 @@ def dump_test_emb():
 
     sna_valid_author_raw = data_utils.load_json(settings.SNA_PUB_DIR, 'sna_valid_author_raw.json')
     for name in sna_valid_author_raw.keys():
+        if name == "j_yu":
+            continue
         print ("name: ", name)
         checkPids = sna_valid_author_raw[name]
         embs_input = []
