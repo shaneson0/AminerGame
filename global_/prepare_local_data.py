@@ -24,6 +24,8 @@ def dump_train_emb():
     trained_global_model = global_model.load_triplets_model()
     name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_train.json')
     for name in name_to_pubs_test:
+        if name == "roger_williams":
+            continue
         print('name', name)
         name_data = name_to_pubs_test[name]
         embs_input = []
