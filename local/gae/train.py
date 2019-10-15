@@ -27,6 +27,8 @@ from utils import settings
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
+from quick_cluster import FINCH
+
 # Settings
 flags = tf.app.flags
 FLAGS = flags.FLAGS
@@ -143,11 +145,14 @@ def gae_for_na(name, localTest=False):
               "train_acc=", "{:.5f}".format(avg_accuracy),
               "time=", "{:.5f}".format(time.time() - t))
 
-    emb = get_embs()
     Maxscore = -10000
     NumberOfCluster = 0
-    for nc in range(2, originNumberOfClusterlabels + 1, 1):
-        TempLabels = clustering(emb, nc)
+    emb = get_embs()
+    c, num_clust, req_c = FINCH(emb)
+    print("num_clust: ", num_clust)
+    for nc in num_clust:
+        emb_norm = normalize_vectors(emb)
+        TempLabels = clustering(emb_norm, nc)
         score = silhouette_score(emb, TempLabels)
         print('nc: ', nc, ', score: ', score)
         if score > Maxscore:
@@ -156,7 +161,6 @@ def gae_for_na(name, localTest=False):
             NumberOfCluster = nc
 
 
-    n_clusters = len(set(labels))
     emb_norm = normalize_vectors(emb)
     clusters_pred = clustering(emb_norm, num_clusters=NumberOfCluster)
     # prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, labels)
