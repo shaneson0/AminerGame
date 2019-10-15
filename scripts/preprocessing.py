@@ -52,7 +52,7 @@ def dump_author_features_to_cache():
                 print('line', i)
             items = line.rstrip().split('\t')
             pid_order = items[0]
-            print ("pid_order: ", pid_order, items)
+            # print ("pid_order: ", pid_order, items)
             author_features = items[1].split()
             lc.set(pid_order, author_features)
 
@@ -109,11 +109,11 @@ def dump_author_embs():
                 print('cnt', cnt, datetime.now()-start_time)
             cnt += 1
             pid_order = k[0].decode('utf-8')
-            print ("pid_order: ", pid_order)
+            # print ("pid_order: ", pid_order)
             features = data_utils.deserialize_embedding(k[1])
             cur_emb = emb_model.project_embedding(features, idf)
             if cur_emb is not None:
-                print ("pid_order: is not none", pid_order)
+                # print ("pid_order: is not none", pid_order)
                 lc_emb.set(pid_order, cur_emb)
 
 
