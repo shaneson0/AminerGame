@@ -109,16 +109,22 @@ def gen_local_data(idf_threshold=10):
         if name == "li_guo":
             print(i, name, pids)
 
+        tempids = []
         shuffle(pids)
         for pid in pids:
             cur_pub_emb = lc_inter.get(pid)
             if cur_pub_emb is not None:
+                tempids.append(pid)
                 cur_pub_emb = list(map(str, cur_pub_emb))
                 pids_set.add(pid)
                 wf_content.write('{}\t'.format(pid))
                 wf_content.write('\t'.join(cur_pub_emb))
                 wf_content.write('\t{}\n'.format(pids2label[pid]))
         wf_content.close()
+
+        if name == "li_guo":
+            print(i, name, tempids)
+            print ("len1 : %d, len2: %d"%(len(pids), len(tempids)))
 
         # generate network
         pids_filter = list(pids_set)
