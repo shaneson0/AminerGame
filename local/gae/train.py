@@ -249,10 +249,10 @@ def tSNEAnanlyse(emb, labels, trueLabels, savepath=False):
     plt.figure()
     # labels = np.array(labels) + 2
     X_new = TSNE(learning_rate=100).fit_transform(emb)
-    plt.subplot(2,1)
+    plt.subplot(2,1,1)
     plt.scatter(X_new[:, 0], X_new[:, 1], c=labels, marker='o')
 
-    plt.subplot(2,2)
+    plt.subplot(2,1,2)
     plt.scatter(X_new[:, 0], X_new[:, 1], c=trueLabels, marker='o')
 
 
