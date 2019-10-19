@@ -26,7 +26,7 @@ def dump_emb():
     for name in name_to_pubs_train:
         if name == "roger_williams":
             continue
-        print('name', name)
+        # print('name', name)
         name_data = name_to_pubs_train[name]
         embs_input = []
         pids = []
@@ -36,7 +36,7 @@ def dump_emb():
             for pid in name_data[aid]:
                 cur_emb = lc_input.get(pid)
                 if cur_emb is None:
-                    print ("pid emb is null: ", pid)
+                    # print ("pid emb is null: ", pid)
                     continue
 
                 embs_input.append(cur_emb)
@@ -231,9 +231,9 @@ def gen_sna_data(idf_threshold=10):
                 wf_content.write('\t{}\n'.format(pids2label[pid]))
         wf_content.close()
 
-        if name == "li_guo":
-            print(i, name, tempids)
-            print ("len1 : %d, len2: %d"%(len(pids), len(tempids)))
+
+        print(i, name, tempids)
+        print ("len1 : %d, len2: %d"%(len(pids), len(tempids)))
 
         # generate network
         pids_filter = list(pids_set)
