@@ -90,7 +90,7 @@ def gen_local_data(idf_threshold=10):
     graph_dir = join(settings.DATA_DIR, 'local', 'graph-{}'.format(idf_threshold))
     os.makedirs(graph_dir, exist_ok=True)
     for i, name in enumerate(name_to_pubs_test):
-        print(i, name)
+
         cur_person_dict = name_to_pubs_test[name]
         pids_set = set()
         pids = []
@@ -105,6 +105,10 @@ def gen_local_data(idf_threshold=10):
             for pid in items:
                 pids2label[pid] = aid
                 pids.append(pid)
+
+        if name == "li_guo":
+            print(i, name, pids)
+
         shuffle(pids)
         for pid in pids:
             cur_pub_emb = lc_inter.get(pid)
@@ -139,7 +143,7 @@ def gen_local_data(idf_threshold=10):
 
 if __name__ == '__main__':
     # dump_inter_emb()
-    dump_train_emb()
-    dump_test_emb()
+    # dump_train_emb()
+    # dump_test_emb()
     gen_local_data(idf_threshold=IDF_THRESHOLD)
     print('done')
