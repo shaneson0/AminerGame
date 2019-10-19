@@ -33,7 +33,7 @@ from quick_cluster import FINCH
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
-flags.DEFINE_integer('epochs', 200, 'Number of epochs to train.')
+flags.DEFINE_integer('epochs', 1500, 'Number of epochs to train.')
 flags.DEFINE_integer('hidden1', 128, 'Number of units in hidden layer 1.')  # 32
 flags.DEFINE_integer('hidden2', 64, 'Number of units in hidden layer 2.')  # 16
 flags.DEFINE_float('weight_decay', 0., 'Weight for L2 loss on embedding matrix.')
@@ -271,8 +271,8 @@ if __name__ == '__main__':
     # print(cur_metric, num_nodes, n_clusters)
     # gae_for_na('heng_li', localTest=True)
     # gae_for_na('li_guo', localTest=True)
-    gae_for_na('xiang_wang', localTest=True)
-    # main()
+    # gae_for_na('xiang_wang', localTest=True)
+    main()
 
 
 
