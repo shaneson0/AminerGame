@@ -33,7 +33,7 @@ from quick_cluster import FINCH
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
-flags.DEFINE_integer('epochs', 200, 'Number of epochs to train.')
+flags.DEFINE_integer('epochs', 500, 'Number of epochs to train.')
 flags.DEFINE_integer('hidden1', 128, 'Number of units in hidden layer 1.')  # 32
 flags.DEFINE_integer('hidden2', 64, 'Number of units in hidden layer 2.')  # 16
 flags.DEFINE_float('weight_decay', 0., 'Weight for L2 loss on embedding matrix.')
@@ -174,6 +174,8 @@ def gae_for_na(name, localTest=False):
     # print(Res)
     if localTest:
         tSNEAnanlyse(emb, clusters_pred, savepath=join(settings.OUT_DIR, "pic", "%s.jpg"%(name)))
+
+    print("labels: ", len(list(set(labels))))
     # return [prec, rec, f1], num_nodes, NumberOfCluster
 
 
