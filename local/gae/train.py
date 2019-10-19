@@ -173,8 +173,7 @@ def gae_for_na(name, localTest=False):
 
     # print(Res)
     if localTest:
-        tSNEAnanlyse(emb, clusters_pred, savepath=join(settings.OUT_DIR, "pic", "%s.jpg"%(name)))
-        tSNEAnanlyse(emb, labels, savepath=join(settings.OUT_DIR, "pic", "%s_true.jpg"%(name)))
+        tSNEAnanlyse(emb, clusters_pred, labels, savepath=join(settings.OUT_DIR, "pic", "%s.jpg"%(name)))
 
     print("labels: ", len(list(set(labels))))
     # return [prec, rec, f1], num_nodes, NumberOfCluster
@@ -246,14 +245,20 @@ def PCAAnanlyse(emb, labels):
     plt.show()
 
 from sklearn.manifold import TSNE
-def tSNEAnanlyse(emb, labels, savepath=False):
+def tSNEAnanlyse(emb, labels, trueLabels, savepath=False):
     plt.figure()
-    labels = np.array(labels) + 2
-    print('labels : ', labels)
-    print('labels type: ', len(set(labels)))
+    # labels = np.array(labels) + 2
     X_new = TSNE(learning_rate=100).fit_transform(emb)
+    plt.subplot(0)
     plt.scatter(X_new[:, 0], X_new[:, 1], c=labels, marker='o')
+
+    plt.subplot(1)
+    plt.scatter(X_new[:, 0], X_new[:, 1], c=trueLabels, marker='o')
+
+
     plt.show()
+
+
 
     if savepath:
         plt.savefig(savepath)
