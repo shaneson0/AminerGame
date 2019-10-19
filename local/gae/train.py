@@ -271,7 +271,7 @@ if __name__ == '__main__':
     # print(cur_metric, num_nodes, n_clusters)
     # gae_for_na('heng_li', localTest=True)
     # gae_for_na('li_guo', localTest=True)
-    gae_for_na('hong_xiao', localTest=True)
+    gae_for_na('xiang_wang', localTest=True)
     # main()
 
 
