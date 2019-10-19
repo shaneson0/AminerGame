@@ -260,4 +260,5 @@ if __name__ == '__main__':
     dump_emb()
     # dump_test_emb()
     gen_local_data(idf_threshold=IDF_THRESHOLD)
+    gen_sna_data(idf_threshold=IDF_THRESHOLD)
     print('done')
