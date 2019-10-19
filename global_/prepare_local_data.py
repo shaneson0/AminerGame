@@ -125,6 +125,7 @@ def gen_local_data(idf_threshold=10):
     :param idf_threshold: threshold for determining whether there exists an edge between two papers (for this demo we set 29)
     """
     name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_test.json')
+
     idf = data_utils.load_data(settings.GLOBAL_DATA_DIR, 'feature_idf.pkl')
     INTER_LMDB_NAME = 'author_triplets.emb'
     lc_inter = LMDBClient(INTER_LMDB_NAME)
@@ -189,6 +190,70 @@ def gen_local_data(idf_threshold=10):
                     wf_network.write('{}\t{}\n'.format(pids_filter[i], pids_filter[j]))
         wf_network.close()
 
+def gen_sna_data(idf_threshold=10):
+    """
+    generate local data (including paper features and paper network) for each associated name
+    :param idf_threshold: threshold for determining whether there exists an edge between two papers (for this demo we set 29)
+    """
+    # name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_test.json')
+    name_to_pubs_test = data_utils.load_json(settings.SNA_PUB_DIR, 'sna_valid_author_raw.json')
+
+    idf = data_utils.load_data(settings.GLOBAL_DATA_DIR, 'feature_idf.pkl')
+    INTER_LMDB_NAME = 'author_triplets.emb'
+    lc_inter = LMDBClient(INTER_LMDB_NAME)
+    LMDB_AUTHOR_FEATURE = "pub_authors.feature"
+    lc_feature = LMDBClient(LMDB_AUTHOR_FEATURE)
+    graph_dir = join(settings.DATA_DIR, 'local', 'graph-{}'.format(idf_threshold))
+    os.makedirs(graph_dir, exist_ok=True)
+    for i, name in enumerate(name_to_pubs_test):
+
+        cur_person_dict = name_to_pubs_test[name]
+        pids_set = set()
+        pids = []
+        pids2label = {}
+
+        # generate content
+        wf_content = open(join(graph_dir, '{}_pubs_content.txt'.format(name)), 'w')
+        for i, pid in enumerate(cur_person_dict):
+            pids2label[pid] = 1
+            pids.append(pid)
+
+        tempids = []
+        shuffle(pids)
+        for pid in pids:
+            cur_pub_emb = lc_inter.get(pid)
+            if cur_pub_emb is not None:
+                tempids.append(pid)
+                cur_pub_emb = list(map(str, cur_pub_emb))
+                pids_set.add(pid)
+                wf_content.write('{}\t'.format(pid))
+                wf_content.write('\t'.join(cur_pub_emb))
+                wf_content.write('\t{}\n'.format(pids2label[pid]))
+        wf_content.close()
+
+        if name == "li_guo":
+            print(i, name, tempids)
+            print ("len1 : %d, len2: %d"%(len(pids), len(tempids)))
+
+        # generate network
+        pids_filter = list(pids_set)
+        n_pubs = len(pids_filter)
+        print('n_pubs', n_pubs)
+        wf_network = open(join(graph_dir, '{}_pubs_network.txt'.format(name)), 'w')
+        for i in range(n_pubs-1):
+            if i % 10 == 0:
+                print(i)
+            author_feature1 = set(lc_feature.get(pids_filter[i]))
+            for j in range(i+1, n_pubs):
+                author_feature2 = set(lc_feature.get(pids_filter[j]))
+                common_features = author_feature1.intersection(author_feature2)
+                idf_sum = 0
+                for f in common_features:
+                    idf_sum += idf.get(f, idf_threshold)
+                    # print(f, idf.get(f, idf_threshold))
+                if idf_sum >= idf_threshold:
+                    wf_network.write('{}\t{}\n'.format(pids_filter[i], pids_filter[j]))
+        wf_network.close()
 
 if __name__ == '__main__':
     # dump_inter_emb()
