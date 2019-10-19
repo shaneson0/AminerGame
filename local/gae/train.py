@@ -33,7 +33,7 @@ from quick_cluster import FINCH
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_float('learning_rate', 0.01, 'Initial learning rate.')
-flags.DEFINE_integer('epochs', 500, 'Number of epochs to train.')
+flags.DEFINE_integer('epochs', 300, 'Number of epochs to train.')
 flags.DEFINE_integer('hidden1', 128, 'Number of units in hidden layer 1.')  # 32
 flags.DEFINE_integer('hidden2', 64, 'Number of units in hidden layer 2.')  # 16
 flags.DEFINE_float('weight_decay', 0., 'Weight for L2 loss on embedding matrix.')
@@ -249,10 +249,10 @@ def tSNEAnanlyse(emb, labels, trueLabels, savepath=False):
     plt.figure()
     # labels = np.array(labels) + 2
     X_new = TSNE(learning_rate=100).fit_transform(emb)
-    plt.subplot(0)
+    plt.subplot((2,1))
     plt.scatter(X_new[:, 0], X_new[:, 1], c=labels, marker='o')
 
-    plt.subplot(1)
+    plt.subplot((2,2))
     plt.scatter(X_new[:, 0], X_new[:, 1], c=trueLabels, marker='o')
 
 
