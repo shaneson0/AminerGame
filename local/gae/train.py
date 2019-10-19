@@ -174,6 +174,7 @@ def gae_for_na(name, localTest=False):
     # print(Res)
     if localTest:
         tSNEAnanlyse(emb, clusters_pred, savepath=join(settings.OUT_DIR, "pic", "%s.jpg"%(name)))
+        tSNEAnanlyse(emb, labels, savepath=join(settings.OUT_DIR, "pic", "%s_true.jpg"%(name)))
 
     print("labels: ", len(list(set(labels))))
     # return [prec, rec, f1], num_nodes, NumberOfCluster
