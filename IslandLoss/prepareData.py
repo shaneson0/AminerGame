@@ -103,7 +103,27 @@ def dump_author_embs():
                 # print ("pid_order: is not none", pid_order)
                 lc_emb.set(pid, cur_emb)
 
+def encode_labels(train_author):
+    labels = []
+    for name in train_author.keys():
+        for aid in train_author[name].keys():
+            labels.append(aid)
+    classes = set(labels)
+    classes_dict = {c: i for i, c in enumerate(classes)}
+    return classes_dict
+    # return list(map(lambda x: classes_dict[x], labels))
 
+def dumpPublicationLabel():
+    PUBLICATION_LABEL = 'Publication.label'
+    lc_publication_label = LMDBClient(PUBLICATION_LABEL)
+    train_author = data_utils.load_data(settings.TRAIN_PUB_DIR, 'train_author.json')
+    classes_dict = encode_labels(train_author)
+
+    for name in train_author.keys():
+        for aid in train_author[name].keys():
+            for pid in train_author[name][aid]:
+                print ("%s : %s"%(pid, classes_dict[aid]))
+                lc_publication_label.set(pid, classes_dict[aid])
 
 if __name__ == '__main__':
     # dump_paper_feature_to_file()
@@ -112,3 +132,7 @@ if __name__ == '__main__':
     emb_model.train('shanxuan_islandLoss', LMDB_NAME='publication_IslandLoss.feature')  # training word embedding model
     cal_feature_idf()
     dump_author_embs()
+    dumpPublicationLabel()
+
+
+
