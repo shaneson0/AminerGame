@@ -113,10 +113,13 @@ def encode_labels(train_author):
     return classes_dict
     # return list(map(lambda x: classes_dict[x], labels))
 
+import json
 def dumpPublicationLabel():
     PUBLICATION_LABEL = 'Publication.label'
     lc_publication_label = LMDBClient(PUBLICATION_LABEL)
-    train_author = data_utils.load_data(settings.TRAIN_PUB_DIR, 'train_author.json')
+    with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
+        train_author = json.load(fp)
+        fp.close()
     classes_dict = encode_labels(train_author)
 
     for name in train_author.keys():
