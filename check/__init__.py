@@ -16,12 +16,12 @@ def load_train_names():
     return list(ValidAuthor.keys())
 
 def main():
-    names = load_test_names()
+    names = load_train_names()
     Prec = 0
     Recall = 0
     F1 = 0
     for name in names:
-        adj, features, labels, Ids = load_train_names(name=name)
+        adj, features, labels, Ids = load_local_data(name=name)
         emb_norm = normalize_vectors(features)
         clusters_pred = clustering(emb_norm, features)
         prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, labels)
