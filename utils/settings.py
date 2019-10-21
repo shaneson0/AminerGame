@@ -6,6 +6,7 @@ DATA_DIR = join(PROJ_DIR, 'data')
 OUT_DIR = join(PROJ_DIR, 'out')
 EMB_DATA_DIR = join(DATA_DIR, 'emb')
 GLOBAL_DATA_DIR = join(DATA_DIR, 'global_')
+ISLAND_LOSS_DIR = join(DATA_DIR, 'IslandLoss')
 os.makedirs(OUT_DIR, exist_ok=True)
 os.makedirs(EMB_DATA_DIR, exist_ok=True)
 
