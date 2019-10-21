@@ -12,6 +12,28 @@ import math
 import numpy as np
 import json
 
+def encode_labels(train_author):
+    labels = []
+    for name in train_author.keys():
+        for aid in train_author[name].keys():
+            labels.append(aid)
+    classes = set(labels)
+    classes_dict = {c: i for i, c in enumerate(classes)}
+    return classes_dict
+
+def genPublicationLabel():
+    Label = {}
+    with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
+        train_author = json.load(fp)
+        fp.close()
+    classes_dict = encode_labels(train_author)
+
+    for name in train_author.keys():
+        for aid in train_author[name].keys():
+            for pid in train_author[name][aid]:
+                Label[pid] = classes_dict[aid]
+    return Label
+
 
 # prepare Data
 TrainPids = []
@@ -25,8 +47,7 @@ for name in train_author.keys():
 TrainPids = np.array(TrainPids)
 
 TrainPids, TestPids = train_test_split(TrainPids, test_size=0.33, random_state=42)
-PUBLICATION_LABEL = 'Publication.label'
-lc_publication_label = LMDBClient(PUBLICATION_LABEL)
+LabelDict = genPublicationLabel()
 
 LMDB_NAME_EMB = "publication.emb.weighted"
 lc_emb = LMDBClient(LMDB_NAME_EMB)
@@ -37,12 +58,12 @@ TrainY = []
 
 for pid in TrainPids:
     emb = lc_emb.get(pid)
-    label = lc_emb.get(pid)
-    print ("pid: ", pid, ", label: ", label)
+    label = LabelDict[pid]
+    print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
     if emb is None:
         continue
     TrainX.append(emb)
-    TrainY.append()
+    TrainY.append(label)
 
 print (TrainPids, len(TrainPids))
 print (TestPids, len(TestPids))
