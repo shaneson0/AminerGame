@@ -38,3 +38,6 @@ def main():
     print('All pairwise precision', '{:.5f}'.format(Prec),
           'recall', '{:.5f}'.format(Recall),
           'f1', '{:.5f}'.format(F1))
+
+if __name__ == '__main__':
+    main()
