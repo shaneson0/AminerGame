@@ -126,7 +126,7 @@ def dumpPublicationLabel():
         for aid in train_author[name].keys():
             for pid in train_author[name][aid]:
                 print ("%s : %s"%(pid, classes_dict[aid]))
-                lc_publication_label.set(pid, classes_dict[aid])
+                lc_publication_label.set_label(pid, classes_dict[aid])
 
 if __name__ == '__main__':
     # dump_paper_feature_to_file()
