@@ -31,6 +31,10 @@ def dump_paper_feature_to_file():
         wf.write(pid + '\t' + ' '.join(author_feature) + '\n')
     wf.close()
 
+
+
+
+
 def dump_author_features_to_cache():
     """
     dump author features to lmdb
