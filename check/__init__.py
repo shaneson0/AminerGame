@@ -23,7 +23,7 @@ def main():
     for name in names:
         adj, features, labels, Ids = load_local_data(name=name)
         emb_norm = normalize_vectors(features)
-        clusters_pred = clustering(emb_norm, features)
+        clusters_pred = clustering(emb_norm, len(list(set(labels))))
         prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, labels)
         print('pairwise precision', '{:.5f}'.format(prec),
               'recall', '{:.5f}'.format(rec),
