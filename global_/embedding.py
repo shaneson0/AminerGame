@@ -19,9 +19,8 @@ class EmbeddingModel:
         self.model = None
         self.name = name
 
-    def train(self, wf_name, size=EMB_DIM):
+    def train(self, wf_name, size=EMB_DIM, LMDB_NAME='pub_authors.feature'):
         data = []
-        LMDB_NAME = 'pub_authors.feature'
         lc = LMDBClient(LMDB_NAME)
         author_cnt = 0
         with lc.db.begin() as txn:
