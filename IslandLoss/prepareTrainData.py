@@ -34,39 +34,52 @@ def genPublicationLabel():
                 Label[pid] = classes_dict[aid]
     return Label
 
+def prepareData():
+    # prepare Data
+    TrainPids = []
+    with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
+        train_author = json.load(fp)
+        fp.close()
+    for name in train_author.keys():
+        for aid in train_author[name]:
+            TrainPids = TrainPids + train_author[name][aid]
 
-# prepare Data
-TrainPids = []
-with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
-    train_author = json.load(fp)
-    fp.close()
-for name in train_author.keys():
-    for aid in train_author[name]:
-        TrainPids = TrainPids + train_author[name][aid]
+    TrainPids = np.array(TrainPids)
 
-TrainPids = np.array(TrainPids)
+    TrainPids, TestPids = train_test_split(TrainPids, test_size=0.33, random_state=42)
+    LabelDict = genPublicationLabel()
 
-TrainPids, TestPids = train_test_split(TrainPids, test_size=0.33, random_state=42)
-LabelDict = genPublicationLabel()
+    LMDB_NAME_EMB = "publication.emb.weighted"
+    lc_emb = LMDBClient(LMDB_NAME_EMB)
 
-LMDB_NAME_EMB = "publication.emb.weighted"
-lc_emb = LMDBClient(LMDB_NAME_EMB)
+    TrainX = []
+    TrainY = []
+    TestX = []
+    TestY = []
 
-TrainX = []
-TrainY = []
+    for pid in TrainPids:
+        emb = lc_emb.get(pid)
+        label = LabelDict[pid]
+        # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
+        if emb is None:
+            continue
+        TrainX.append(emb)
+        TrainY.append(label)
+
+    for pid in TestPids:
+        emb = lc_emb.get(pid)
+        label = LabelDict[pid]
+        # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
+        if emb is None:
+            continue
+        TestX.append(emb)
+        TestY.append(label)
+
+    return TrainX, TrainY, TestX, TestY
+
+###
 
 
-for pid in TrainPids:
-    emb = lc_emb.get(pid)
-    label = LabelDict[pid]
-    print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
-    if emb is None:
-        continue
-    TrainX.append(emb)
-    TrainY.append(label)
-
-print (TrainPids, len(TrainPids), len(list(set(TrainPids))))
-print (TestPids, len(TestPids), len(list(set(TestPids))))
 
 
 
