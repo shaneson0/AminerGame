@@ -13,6 +13,8 @@ import math
 
 
 train_author = data_utils.load_data(settings.TRAIN_PUB_DIR, 'train_author.json')
+for name in train_author.keys():
+    for pid in train_author[name]:
 
 
 

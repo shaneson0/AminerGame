@@ -128,10 +128,10 @@ def dumpPublicationLabel():
 if __name__ == '__main__':
     # dump_paper_feature_to_file()
     # dump_author_features_to_cache()
-    emb_model = EmbeddingModel.Instance()
-    emb_model.train('shanxuan_islandLoss', LMDB_NAME='publication_IslandLoss.feature')  # training word embedding model
-    cal_feature_idf()
-    dump_author_embs()
+    # emb_model = EmbeddingModel.Instance()
+    # emb_model.train('shanxuan_islandLoss', LMDB_NAME='publication_IslandLoss.feature')  # training word embedding model
+    # cal_feature_idf()
+    # dump_author_embs()
     dumpPublicationLabel()
 
 
