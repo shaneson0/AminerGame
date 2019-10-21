@@ -11,7 +11,7 @@ cnt = 0
 for name in TrainAuthor.keys():
     Author = TrainAuthor[name]
     for pid in Author.keys():
-       if TrainPub.has_key(pid) :
+       if TrainPub.__contains__(pid) :
            print ("%s not in TrainPub"%(pid))
            cnt += 1
 
