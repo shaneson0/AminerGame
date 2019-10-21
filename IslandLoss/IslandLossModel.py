@@ -13,7 +13,7 @@ class CenterLossModel(object):
         self.num_classes = num_classes
         self.alpha = alpha
         self.placeholder = {
-            'input': tf.placeholder(tf.float32, shape=(EMB_DIM, )),
+            'input': tf.placeholder(tf.float32, shape=(EMB_DIM)),
             'labels': tf.placeholder(tf.int32, shape=(None))
         }
 
