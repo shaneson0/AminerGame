@@ -65,8 +65,8 @@ for pid in TrainPids:
     TrainX.append(emb)
     TrainY.append(label)
 
-print (TrainPids, len(TrainPids))
-print (TestPids, len(TestPids))
+print (TrainPids, len(TrainPids), len(list(set(TrainPids))))
+print (TestPids, len(TestPids), len(list(set(TestPids))))
 
 
 
