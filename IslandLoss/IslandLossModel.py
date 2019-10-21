@@ -8,10 +8,10 @@ from keras.models import Model, model_from_json
 EMB_DIM = 64
 
 class CenterLossModel(object):
-    def __init__(self, alpha, EMB_DIM = 128):
+    def __init__(self, alpha, num_classes, EMB_DIM = 128):
         # self.labels = labels
+        self.num_classes = num_classes
         self.alpha = alpha
-        self.num_classes = len(list(set(labels)))
         self.placeholder = {
             'input': tf.placeholder(tf.float32, shape=(EMB_DIM, )),
             'labels': tf.placeholder(tf.int32, shape=(None))
