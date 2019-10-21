@@ -34,6 +34,10 @@ class LMDBClient(object):
                     values.append(data_utils.deserialize_embedding(value))
         return values
 
+    def set_label(self, key, label):
+        with self.db.begin(write=True) as txn:
+            txn.put(key.encode("utf-8"), label)
+
     def set(self, key, vector):
         with self.db.begin(write=True) as txn:
             txn.put(key.encode("utf-8"), data_utils.serialize_embedding(vector))
