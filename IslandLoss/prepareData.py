@@ -2,7 +2,7 @@ from utils import data_utils
 from utils import settings
 import codecs
 from os.path import join
-import datetime
+from datetime import datetime
 from utils import feature_utils
 
 start_time = datetime.now()
