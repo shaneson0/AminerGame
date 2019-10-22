@@ -79,22 +79,22 @@ class CenterLossModel(object):
 
 
     def tarin(self, X, y, epochs=10000):
-        sess = tf.Session()
-        sess.run(tf.global_variables_initializer())
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
 
-        model = self.buildModel()
-        loss, opt = self.buildOptimizer(model)
+            model = self.buildModel()
+            loss, opt = self.buildOptimizer(model)
 
-        # Train model
-        for epoch in range(epochs):
-            # Construct feed dictionary
-            feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
-            # Run single weight update
-            outs = sess.run([loss, opt], feed_dict=feed_dict)
+            # Train model
+            for epoch in range(epochs):
+                # Construct feed dictionary
+                feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
+                # Run single weight update
+                outs = sess.run([loss, opt], feed_dict=feed_dict)
 
-            # Compute average loss
-            outs = outs[0]
-            print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(outs[0]))
+                # Compute average loss
+                outs = outs[0]
+                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(outs[0]))
 
 if __name__ == '__main__':
     model = CenterLossModel([1,2,3], 0.1)
