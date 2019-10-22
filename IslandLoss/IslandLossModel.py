@@ -64,7 +64,7 @@ class CenterLossModel(object):
 
     def buildModel(self):
         emb_input = self.placeholder['input']
-        layer1 = tf.keras.layers.Dense(128, activation='relu', name='first_emb_layer')
+        layer1 = tf.keras.layers.Dense(100, activation='relu', name='first_emb_layer')
         layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer')
         norm_layer = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[64])
         encoded_emb = norm_layer(layer2(layer1(emb_input)))
