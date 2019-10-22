@@ -8,7 +8,7 @@ from keras.models import Model, model_from_json
 EMB_DIM = 64
 
 class CenterLossModel(object):
-    def __init__(self, alpha, num_classes, EMB_DIM = 128):
+    def __init__(self, alpha, num_classes, EMB_DIM = 100):
         # self.labels = labels
         self.num_classes = num_classes
         self.alpha = alpha
