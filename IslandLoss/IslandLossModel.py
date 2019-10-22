@@ -72,7 +72,7 @@ class CenterLossModel(object):
 
     def buildOptimizer(self, encoded_emb):
         loss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
-        optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
+        optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
             train_op = optimizer.minimize(loss)
         return loss, train_op
