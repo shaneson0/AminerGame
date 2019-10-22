@@ -78,7 +78,7 @@ class CenterLossModel(object):
         return loss, train_op
 
 
-    def tarin(self, X, y, epochs=10000):
+    def tarin(self, X, y, epochs=100):
         model = self.buildModel()
         loss, opt = self.buildOptimizer(model)
 
