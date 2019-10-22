@@ -70,8 +70,8 @@ class CenterLossModel(object):
         encoded_emb = norm_layer(layer2(layer1(emb_input)))
         return encoded_emb
 
-    def buildOptimizer(self, model):
-        loss, centers, centers_update_op = self.get_center_loss(model.encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
+    def buildOptimizer(self, encoded_emb):
+        loss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
         optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
             train_op = optimizer.minimize(loss)
