@@ -75,7 +75,7 @@ def prepareData():
         TestX.append(emb)
         TestY.append(label)
 
-    return TrainX, TrainY, TestX, TestY, len(list(set(LabelDict.values())))
+    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), len(list(set(LabelDict.values())))
 
 ###
 
