@@ -80,10 +80,10 @@ class CenterLossModel(object):
 
     def tarin(self, X, y, epochs=10000):
         with tf.Session() as sess:
-            sess.run(tf.global_variables_initializer())
-
             model = self.buildModel()
             loss, opt = self.buildOptimizer(model)
+
+            sess.run(tf.global_variables_initializer())
 
             # Train model
             for epoch in range(epochs):
