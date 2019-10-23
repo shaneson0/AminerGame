@@ -17,6 +17,8 @@ def encode_labels(train_author):
     for name in train_author.keys():
         for aid in train_author[name].keys():
             labels.append(aid)
+
+    print ("classes number: ", len(list(set(labels))))
     classes = set(labels)
     classes_dict = {c: i for i, c in enumerate(classes)}
     return classes_dict
