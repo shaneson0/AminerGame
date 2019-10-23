@@ -16,8 +16,8 @@ model = CenterLossModel(alpha=0.5, num_classes=NumberOfClass)
 print ("NumberOfClass: ", NumberOfClass)
 print ("max Trainy: ", max(TrainY))
 
-TrainX = list(chunks(TrainX, 6000))
-TrainY = list(chunks(TrainY, 6000))
+TrainX = list(chunks(TrainX, len(TrainX)))
+TrainY = list(chunks(TrainY, len(TrainX)))
 # x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
 # print (TrainX, TrainY)
 
