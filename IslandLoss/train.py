@@ -14,9 +14,9 @@ def get_Batch(data, label, batch_size):
 TrainX, TrainY, TestX, TestY, NumberOfClass = prepareData()
 model = CenterLossModel(alpha=0.5, num_classes=NumberOfClass)
 
-
-print (TrainX.shape, TrainY.shape)
-model.tarin(TrainX, TrainY)
+x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
+print (x_batch.shape, y_batch.shape)
+model.tarin(x_batch, y_batch)
 
 
 
