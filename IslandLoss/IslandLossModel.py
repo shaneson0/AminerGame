@@ -123,7 +123,7 @@ class CenterLossModel(object):
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
-
+            sess.run(tf.local_variables_initializer())
 
             # Train model
             for epoch in range(epochs):
