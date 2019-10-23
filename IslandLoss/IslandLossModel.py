@@ -76,8 +76,9 @@ class CenterLossModel(object):
         return encoded_emb
 
     def buildOptimizer(self, encoded_emb):
+        OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
         loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
-            labels= self.placeholder['oneHotLabel'],
+            labels= OneHotLabel,
             logits=encoded_emb
         ))
         centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
@@ -105,7 +106,7 @@ class CenterLossModel(object):
         plt.close()
 
     def tarin(self, X, y, epochs=500):
-        OneHotLabel = tf.one_hot(y, 64)
+
         model = self.buildModel()
         loss, opt = self.buildOptimizer(model)
 
@@ -115,7 +116,7 @@ class CenterLossModel(object):
             # Train model
             for epoch in range(epochs):
                 # Construct feed dictionary
-                feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y, self.placeholder['oneHotLabel']: OneHotLabel}
+                feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
                 # Run single weight update
                 outs = sess.run([loss, opt], feed_dict=feed_dict)
 
