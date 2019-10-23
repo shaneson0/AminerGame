@@ -116,7 +116,7 @@ class CenterLossModel(object):
         plt.close()
 
 
-    def tarin(self, X, y, testX, testy, epochs=3000):
+    def tarin(self, batchX, batchy, testX, testy, epochs=3000):
 
         model = self.buildModel()
         loss, opt, acc, acc_op = self.buildOptimizer(model)
@@ -127,18 +127,18 @@ class CenterLossModel(object):
 
             # Train model
             for epoch in range(epochs):
-                for batchid, batchX in enumerate(X):
-                    batchy = y[batchid]
+                # for batchid, batchX in enumerate(X):
+                # batchy = y[batchid]
 
-                    # Construct feed dictionary
-                    feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
-                    # Run single weight update
-                    outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
-                    # Compute average loss
-                    lossScale = outs[0]
-                    accScale = outs[2]
+                # Construct feed dictionary
+                feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
+                # Run single weight update
+                outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
+                # Compute average loss
+                lossScale = outs[0]
+                accScale = outs[2]
 
-                    print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
+                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
             testacc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
             print ("test acc: ", testacc)
