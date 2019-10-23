@@ -127,7 +127,7 @@ class CenterLossModel(object):
         return [classes_dict[l] for l in labels]
 
 
-    def tarin(self, batchX, batchy, testX, testy, epochs=3000):
+    def tarin(self, batchX, batchy, testX, testy, AllX, Ally, epochs=3000):
 
         model = self.buildModel()
         loss, opt = self.buildOptimizer(model)
@@ -157,8 +157,8 @@ class CenterLossModel(object):
 
 
             # check embedding
-            ClusterCheckX = batchX + testX
-            ClusterCheckY = batchy + testy
+            ClusterCheckX = AllX
+            ClusterCheckY = Ally
 
 
             embedding = sess.run(model, feed_dict={self.placeholder['input']: ClusterCheckX, self.placeholder['labels']: ClusterCheckY})

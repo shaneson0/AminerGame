@@ -55,6 +55,8 @@ def prepareData():
     LMDB_NAME_EMB = "publication.emb.weighted"
     lc_emb = LMDBClient(LMDB_NAME_EMB)
 
+    AllX = []
+    Ally = []
     TrainX = []
     TrainY = []
     TestX = []
@@ -66,8 +68,10 @@ def prepareData():
         # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
         if emb is None:
             continue
+        AllX.append(emb)
         TrainX.append(emb)
         TrainY.append(label)
+        Ally.append(label)
 
     for pid in TestPids:
         emb = lc_emb.get(pid)
@@ -75,10 +79,12 @@ def prepareData():
         # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
         if emb is None:
             continue
+        AllX.append(emb)
         TestX.append(emb)
         TestY.append(label)
+        Ally.append(label)
 
-    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss
+    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss, AllX, Ally
 
 ###
 

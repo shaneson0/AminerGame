@@ -10,7 +10,7 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
-TrainX, TrainY, TestX, TestY, NumberOfClass = prepareData()
+TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 model = CenterLossModel(alpha=0.5, num_classes=NumberOfClass)
 
 print ("NumberOfClass: ", NumberOfClass)
@@ -21,7 +21,7 @@ print ("max Trainy: ", max(TrainY))
 # x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
 # print (TrainX, TrainY)
 
-model.tarin(TrainX, TrainY, TestX, TestY)
+model.tarin(TrainX, TrainY, TestX, TestY, AllX, Ally)
 
 
 
