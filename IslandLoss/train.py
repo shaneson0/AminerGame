@@ -4,19 +4,21 @@ from IslandLoss.prepareTrainData import prepareData
 import tensorflow as tf
 
 
-def get_Batch(data, label, batch_size):
-    # print(data.shape, label.shape)
-    input_queue = tf.train.slice_input_producer([data, label], num_epochs=1, shuffle=True, capacity=32 )
-    x_batch, y_batch = tf.train.batch(input_queue, batch_size=batch_size, num_threads=1, capacity=32, allow_smaller_final_batch=False)
-    return x_batch, y_batch
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
 
 
 TrainX, TrainY, TestX, TestY, NumberOfClass = prepareData()
 model = CenterLossModel(alpha=0.5, num_classes=NumberOfClass)
 
-x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
-print (x_batch.shape, y_batch.shape)
-model.tarin(x_batch, y_batch)
+TrainX = list(chunks(TrainX, 10))
+TrainY = list(chunks(TrainY, 10))
+# x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
+print (TrainX, TrainY)
+print (TrainX.shape, TrainY.shape)
+# model.tarin(x_batch, y_batch)
 
 
 
