@@ -157,8 +157,8 @@ class CenterLossModel(object):
 
 
             # check embedding
-            ClusterCheckX = testX[:1000]
-            ClusterCheckY = testy[:1000]
+            ClusterCheckX = batchX + testX
+            ClusterCheckY = batchy + testy
 
 
             embedding = sess.run(model, feed_dict={self.placeholder['input']: ClusterCheckX, self.placeholder['labels']: ClusterCheckY})
