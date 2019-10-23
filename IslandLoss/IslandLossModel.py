@@ -120,11 +120,12 @@ class CenterLossModel(object):
                 # Construct feed dictionary
                 feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
                 # Run single weight update
-                outs = sess.run([loss, opt, acc_op, acc], feed_dict=feed_dict)
+                outs = sess.run([loss, opt], feed_dict=feed_dict)
+                outs2 = sess.run([acc,acc_op], feed_dict=feed_dict)
 
                 # Compute average loss
                 lossScale = outs[0]
-                accScale = outs[2]
+                accScale = outs2[1]
 
                 print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
