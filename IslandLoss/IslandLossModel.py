@@ -89,6 +89,7 @@ class CenterLossModel(object):
             for epoch in range(epochs):
                 for idx, batchX in enumerate(X):
                     batchy = y[idx]
+                    print (len(batchX), len(batchy))
                     # Construct feed dictionary
                     feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
                     # Run single weight update
