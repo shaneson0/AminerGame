@@ -6,7 +6,8 @@ from global_.triplet import l2Norm, euclidean_distance, triplet_loss, accuracy
 from keras.models import Model, model_from_json
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
-
+from utils import settings
+from os.path import join
 EMB_DIM = 64
 
 class CenterLossModel(object):
@@ -83,6 +84,21 @@ class CenterLossModel(object):
             train_op = optimizer.minimize(loss)
         return loss, train_op
 
+    def tSNEAnanlyse(self, emb, labels, trueLabels, savepath=False):
+        plt.figure()
+        # labels = np.array(labels) + 2
+        X_new = TSNE(learning_rate=100).fit_transform(emb)
+        plt.subplot(2, 1, 1)
+        plt.scatter(X_new[:, 0], X_new[:, 1], c=labels, marker='o')
+
+        plt.subplot(2, 1, 2)
+        plt.scatter(X_new[:, 0], X_new[:, 1], c=trueLabels, marker='o')
+
+        plt.show()
+
+        if savepath:
+            plt.savefig(savepath)
+        plt.close()
 
     def tarin(self, X, y, epochs=500):
         model = self.buildModel()
@@ -102,10 +118,9 @@ class CenterLossModel(object):
                 lossScale = outs[0]
                 print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
 
-
-
-
-
+            emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
+            self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
+g
 
 if __name__ == '__main__':
     model = CenterLossModel([1,2,3], 0.1)
