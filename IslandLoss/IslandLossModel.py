@@ -87,17 +87,14 @@ class CenterLossModel(object):
 
             # Train model
             for epoch in range(epochs):
-                for idx,batch in enumerate(X):
-                    x_batch = X[idx]
-                    y_batch = y[idx]
-                    # Construct feed dictionary
-                    feed_dict = {self.placeholder['input']: x_batch, self.placeholder['labels']: y_batch}
-                    # Run single weight update
-                    outs = sess.run([loss, opt], feed_dict=feed_dict)
+                # Construct feed dictionary
+                feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
+                # Run single weight update
+                outs = sess.run([loss, opt], feed_dict=feed_dict)
 
-                    # Compute average loss
-                    outs = outs[0]
-                    print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(outs[0]))
+                # Compute average loss
+                outs = outs[0]
+                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(outs[0]))
 
 if __name__ == '__main__':
     model = CenterLossModel([1,2,3], 0.1)
