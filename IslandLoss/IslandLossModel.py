@@ -87,7 +87,10 @@ class CenterLossModel(object):
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
             train_op = optimizer.minimize(loss)
-        return loss, train_op
+
+        acc, acc_op = tf.metrics.accuracy(labels=tf.argmax(OneHotLabel, 1),
+                                          predictions=tf.argmax(tf.sigmoid(encoded_emb), 1))
+        return loss, train_op, acc, acc_op
 
     def tSNEAnanlyse(self, emb, labels, trueLabels, savepath=False):
         plt.figure()
@@ -108,7 +111,7 @@ class CenterLossModel(object):
     def tarin(self, X, y, epochs=500):
 
         model = self.buildModel()
-        loss, opt = self.buildOptimizer(model)
+        loss, opt, acc, acc_op = self.buildOptimizer(model)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -118,11 +121,13 @@ class CenterLossModel(object):
                 # Construct feed dictionary
                 feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
                 # Run single weight update
-                outs = sess.run([loss, opt], feed_dict=feed_dict)
+                outs = sess.run([loss, opt, acc_op, acc], feed_dict=feed_dict)
 
                 # Compute average loss
                 lossScale = outs[0]
-                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
+                accScale = outs[2]
+
+                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
             # emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
             # self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
