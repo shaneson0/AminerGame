@@ -88,8 +88,8 @@ class CenterLossModel(object):
         loss = centerloss
 
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
-        # with tf.control_dependencies([centers_update_op]):
-        train_op = optimizer.minimize(loss)
+        with tf.control_dependencies([centers_update_op]):
+            train_op = optimizer.minimize(loss)
 
         # _acc, acc_op = tf.metrics.accuracy(OneHotLabel,encoded_emb,name="my_metric")
 
