@@ -13,12 +13,12 @@ def chunks(l, n):
 TrainX, TrainY, TestX, TestY, NumberOfClass = prepareData()
 model = CenterLossModel(alpha=0.5, num_classes=NumberOfClass)
 
-TrainX = list(chunks(TrainX, 10))
-TrainY = list(chunks(TrainY, 10))
+TrainX = list(chunks(TrainX, 1500))
+TrainY = list(chunks(TrainY, 1500))
 # x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
 print (TrainX, TrainY)
 print (TrainX.shape, TrainY.shape)
-# model.tarin(x_batch, y_batch)
+model.tarin(TrainX, TrainY)
 
 
 
