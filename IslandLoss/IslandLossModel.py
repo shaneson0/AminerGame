@@ -146,7 +146,7 @@ class CenterLossModel(object):
             print ("test acc: ", testacc)
 
             # check embedding
-            embedding = sess.run(model, feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
+            embedding = sess.run(model, feed_dict={self.placeholder['input']: testX[:-50], self.placeholder['labels']: testy[:-50]})
             self.tSNEAnanlyse(embedding, labels=testy, trueLabels=testy, savepath=join(settings.OUT_DIR, "test_embedding.jpg"))
 
 
