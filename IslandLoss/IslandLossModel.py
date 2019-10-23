@@ -157,7 +157,7 @@ class CenterLossModel(object):
             embedding = sess.run(model, feed_dict={self.placeholder['input']: testX[:100], self.placeholder['labels']: testy[:100]})
             print (embedding.shape)
             emb_norm = normalize_vectors(embedding)
-            clusters_pred = clustering(emb_norm, num_clusters=len(list(set(testy[:100]))))
+            clusters_pred = list(clustering(emb_norm, num_clusters=len(list(set(testy[:100])))))
             embeddingLabels = self.codeLabel(testy[:100])
             print ("clusters_pred: ", clusters_pred)
             print ("embeddingLabels: ", embeddingLabels)
