@@ -1,7 +1,7 @@
 
 from IslandLoss.IslandLossModel import CenterLossModel
 from IslandLoss.prepareTrainData import prepareData
-from tensorflow import tf
+import tensorflow as tf
 
 
 def get_Batch(data, label, batch_size):
