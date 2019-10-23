@@ -129,7 +129,7 @@ class CenterLossModel(object):
                 feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
                 # Run single weight update
                 outs = sess.run([loss, opt], feed_dict=feed_dict)
-                acc, acc_op = self.getAcc(moel)
+                acc, acc_op = self.getAcc(model)
 
                 outs2 = sess.run([acc,acc_op], feed_dict=feed_dict)
 
