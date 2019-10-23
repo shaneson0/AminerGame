@@ -75,9 +75,9 @@ class CenterLossModel(object):
         return encoded_emb
 
     def buildOptimizer(self, encoded_emb):
-        tf.nn.softmax_cross_entropy_with_logits(logits=encoded_emb, targets=self.placeholder['labels'])
+        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=encoded_emb, targets=self.placeholder['labels']))
         centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
-        loss = centerloss
+        loss = loss + centerloss
 
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
@@ -118,8 +118,8 @@ class CenterLossModel(object):
                 lossScale = outs[0]
                 print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
 
-            emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
-            self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
+            # emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
+            # self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
 
 
 if __name__ == '__main__':
