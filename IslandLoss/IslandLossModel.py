@@ -172,7 +172,7 @@ class CenterLossModel(object):
             print('pairwise precision', '{:.5f}'.format(prec),
                   'recall', '{:.5f}'.format(rec),
                   'f1', '{:.5f}'.format(f1))
-            self.tSNEAnanlyse(embedding, labels=ClusterCheckY, trueLabels=ClusterCheckY, savepath=join(settings.OUT_DIR, "test_embedding.jpg"))
+            # self.tSNEAnanlyse(embedding, labels=ClusterCheckY, trueLabels=ClusterCheckY, savepath=join(settings.OUT_DIR, "test_embedding.jpg"))
 
 
 if __name__ == '__main__':
