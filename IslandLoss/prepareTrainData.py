@@ -20,7 +20,7 @@ def encode_labels(train_author):
 
     # print ("classes number: ", len(list(set(labels))))
     classes = set(labels)
-    numberofCluss = len(list(set(labels))
+    numberofCluss = len(list(set(labels)))
     classes_dict = {c: i for i, c in enumerate(classes)}
     return classes_dict, numberofCluss
 
