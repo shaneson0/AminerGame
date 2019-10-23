@@ -120,7 +120,7 @@ class CenterLossModel(object):
 
             emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
             self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
-g
+
 
 if __name__ == '__main__':
     model = CenterLossModel([1,2,3], 0.1)
