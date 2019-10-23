@@ -74,11 +74,9 @@ class CenterLossModel(object):
         return encoded_emb
 
     def buildOptimizer(self, encoded_emb):
-        loss = tf.reduce_mean(
-            tf.nn.weighted_cross_entropy_with_logits(logits=encoded_emb, targets=self.placeholder['labels']))
 
         centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
-        loss = loss + centerloss
+        loss = centerloss
 
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
@@ -95,16 +93,15 @@ class CenterLossModel(object):
 
             # Train model
             for epoch in range(epochs):
-                for idx, batchX in enumerate(X):
-                    batchy = y[idx]
-                    # Construct feed dictionary
-                    feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
-                    # Run single weight update
-                    outs = sess.run([loss, opt], feed_dict=feed_dict)
+                # Construct feed dictionary
+                feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
+                # Run single weight update
+                outs = sess.run([loss, opt], feed_dict=feed_dict)
 
-                    # Compute average loss
-                    lossScale = outs[0]
-                    print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
+                # Compute average loss
+                lossScale = outs[0]
+                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
+
 
 
 
