@@ -20,6 +20,7 @@ print ("max Trainy: ", max(TrainY))
 # TrainY = list(chunks(TrainY, 100))
 # x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
 # print (TrainX, TrainY)
+
 model.tarin(TrainX, TrainY)
 
 
