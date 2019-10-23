@@ -127,9 +127,8 @@ class CenterLossModel(object):
 
             # Train model
             for epoch in range(epochs):
-                NumberofBatch = len(X)
-                for batchid in range(NumberofBatch):
-                    batchX, batchy = X[batchid], y[batchid]
+                for batchid, batchX in enumerate(X):
+                    batchy = y[batchid]
 
                     # Construct feed dictionary
                     feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
