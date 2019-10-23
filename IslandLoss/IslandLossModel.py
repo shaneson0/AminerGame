@@ -80,12 +80,12 @@ class CenterLossModel(object):
             labels= OneHotLabel,
             logits=encoded_emb
         ))
-        centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
-        loss = loss + centerloss
+        # centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
+        loss = loss
 
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
-        with tf.control_dependencies([centers_update_op]):
-            train_op = optimizer.minimize(loss)
+        # with tf.control_dependencies([centers_update_op]):
+        train_op = optimizer.minimize(loss)
 
         _acc, acc_op = tf.metrics.accuracy(OneHotLabel,encoded_emb,name="my_metric")
 
