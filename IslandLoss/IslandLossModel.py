@@ -89,7 +89,7 @@ class CenterLossModel(object):
             train_op = optimizer.minimize(loss)
 
         acc, acc_op = tf.metrics.accuracy(labels=tf.argmax(OneHotLabel, 1),
-                                          predictions=tf.argmax(tf.sigmoid(encoded_emb), 1))
+                                          predictions=tf.argmax(encoded_emb, 1))
         return loss, train_op, acc, acc_op
 
     def tSNEAnanlyse(self, emb, labels, trueLabels, savepath=False):
