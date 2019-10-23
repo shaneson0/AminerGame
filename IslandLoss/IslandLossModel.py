@@ -80,20 +80,21 @@ class CenterLossModel(object):
 
     def buildOptimizer(self, encoded_emb):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
-        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
-            labels= OneHotLabel,
-            logits=encoded_emb
-        ))
-        # centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
-        loss = loss
+        # loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
+        #     labels= OneHotLabel,
+        #     logits=encoded_emb
+        # ))
+        centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
+        loss = centerloss
 
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         # with tf.control_dependencies([centers_update_op]):
         train_op = optimizer.minimize(loss)
 
-        _acc, acc_op = tf.metrics.accuracy(OneHotLabel,encoded_emb,name="my_metric")
+        # _acc, acc_op = tf.metrics.accuracy(OneHotLabel,encoded_emb,name="my_metric")
 
-        return loss, train_op, _acc, acc_op
+        # return loss, train_op, _acc, acc_op
+        return loss, train_op
 
     def getAcc(self, encoded_emb):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
@@ -129,7 +130,7 @@ class CenterLossModel(object):
     def tarin(self, batchX, batchy, testX, testy, epochs=3000):
 
         model = self.buildModel()
-        loss, opt, acc, acc_op = self.buildOptimizer(model)
+        loss, opt = self.buildOptimizer(model)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -143,15 +144,16 @@ class CenterLossModel(object):
                 # Construct feed dictionary
                 feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
                 # Run single weight update
-                outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
+                outs = sess.run([loss, opt], feed_dict=feed_dict)
                 # Compute average loss
                 lossScale = outs[0]
-                accScale = outs[2]
+                # accScale = outs[2]
 
-                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
+                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
+                # print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
-            testacc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
-            print ("test acc: ", testacc)
+            # testacc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
+            # print ("test acc: ", testacc)
 
 
             # check embedding
