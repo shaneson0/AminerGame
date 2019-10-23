@@ -17,8 +17,7 @@ class CenterLossModel(object):
         self.alpha = alpha
         self.placeholder = {
             'input': tf.placeholder(tf.float32, shape=(None, EMB_DIM)),
-            'labels': tf.placeholder(tf.int32, shape=(None)),
-            'oneHotLabel': tf.placeholder(tf.float32, shape=(None, 64))
+            'labels': tf.placeholder(tf.int32, shape=(None))
         }
 
 
