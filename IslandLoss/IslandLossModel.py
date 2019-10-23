@@ -89,7 +89,7 @@ class CenterLossModel(object):
 
         _acc, acc_op = tf.metrics.accuracy(OneHotLabel,encoded_emb,name="my_metric")
 
-        return loss, train_op, acc_op
+        return loss, train_op, acc, acc_op
 
     def getAcc(self, encoded_emb):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
@@ -116,10 +116,10 @@ class CenterLossModel(object):
         plt.close()
 
 
-    def tarin(self, X, y, epochs=3000):
+    def tarin(self, X, y, testX, testy, epochs=3000):
 
         model = self.buildModel()
-        loss, opt, acc_op = self.buildOptimizer(model)
+        loss, opt, acc, acc_op = self.buildOptimizer(model)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -132,7 +132,7 @@ class CenterLossModel(object):
                     batchX, batchy = X[batchid], y[batchid]
 
                     # Construct feed dictionary
-                    feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
+                    feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
                     # Run single weight update
                     outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
                     # Compute average loss
@@ -141,6 +141,8 @@ class CenterLossModel(object):
 
                     print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
+            acc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
+            print ("test acc: ", acc)
 
             # emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
             # self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
