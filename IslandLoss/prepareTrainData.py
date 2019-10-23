@@ -18,23 +18,24 @@ def encode_labels(train_author):
         for aid in train_author[name].keys():
             labels.append(aid)
 
-    print ("classes number: ", len(list(set(labels))))
+    # print ("classes number: ", len(list(set(labels))))
     classes = set(labels)
+    numberofCluss = len(list(set(labels))
     classes_dict = {c: i for i, c in enumerate(classes)}
-    return classes_dict
+    return classes_dict, numberofCluss
 
 def genPublicationLabel():
     Label = {}
     with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
         train_author = json.load(fp)
         fp.close()
-    classes_dict = encode_labels(train_author)
+    classes_dict, numberofCluss = encode_labels(train_author)
 
     for name in train_author.keys():
         for aid in train_author[name].keys():
             for pid in train_author[name][aid]:
                 Label[pid] = classes_dict[aid]
-    return Label
+    return Label, numberofCluss
 
 def prepareData():
     # prepare Data
@@ -49,7 +50,7 @@ def prepareData():
     TrainPids = np.array(TrainPids)
 
     TrainPids, TestPids = train_test_split(TrainPids, test_size=0.33, random_state=42)
-    LabelDict = genPublicationLabel()
+    LabelDict, numberofCluss = genPublicationLabel()
 
     LMDB_NAME_EMB = "publication.emb.weighted"
     lc_emb = LMDBClient(LMDB_NAME_EMB)
@@ -77,7 +78,7 @@ def prepareData():
         TestX.append(emb)
         TestY.append(label)
 
-    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), len(list(set(LabelDict.values())))
+    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss
 
 ###
 
