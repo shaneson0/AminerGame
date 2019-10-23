@@ -75,7 +75,7 @@ class CenterLossModel(object):
         return encoded_emb
 
     def buildOptimizer(self, encoded_emb):
-
+        tf.nn.softmax_cross_entropy_with_logits(logits=encoded_emb, targets=self.placeholder['labels'])
         centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
         loss = centerloss
 
