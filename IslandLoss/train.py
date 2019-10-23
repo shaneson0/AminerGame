@@ -16,8 +16,7 @@ model = CenterLossModel(alpha=0.5, num_classes=NumberOfClass)
 TrainX = list(chunks(TrainX, 1500))
 TrainY = list(chunks(TrainY, 1500))
 # x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
-print (TrainX, TrainY)
-print (TrainX.shape, TrainY.shape)
+# print (TrainX, TrainY)
 model.tarin(TrainX, TrainY)
 
 
