@@ -159,6 +159,8 @@ class CenterLossModel(object):
             emb_norm = normalize_vectors(embedding)
             clusters_pred = clustering(emb_norm, num_clusters=len(list(set(testy[:100]))))
             embeddingLabels = self.codeLabel(testy[:100])
+            print ("clusters_pred: ", clusters_pred)
+            print ("embeddingLabels: ", embeddingLabels)
             prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, embeddingLabels)
             print('pairwise precision', '{:.5f}'.format(prec),
                   'recall', '{:.5f}'.format(rec),
