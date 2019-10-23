@@ -4,6 +4,8 @@ import tensorflow as tf
 from keras.layers import Dense, Input, Lambda
 from global_.triplet import l2Norm, euclidean_distance, triplet_loss, accuracy
 from keras.models import Model, model_from_json
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
 
 EMB_DIM = 64
 
@@ -68,17 +70,23 @@ class CenterLossModel(object):
         layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer')
         norm_layer = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[64])
         encoded_emb = norm_layer(layer2(layer1(emb_input)))
+
         return encoded_emb
 
     def buildOptimizer(self, encoded_emb):
-        loss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
+        loss = tf.reduce_mean(
+            tf.nn.weighted_cross_entropy_with_logits(logits=encoded_emb, targets=self.placeholder['labels']))
+
+        centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
+        loss = loss + centerloss
+
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
             train_op = optimizer.minimize(loss)
         return loss, train_op
 
 
-    def tarin(self, X, y, epochs=100):
+    def tarin(self, X, y, epochs=5):
         model = self.buildModel()
         loss, opt = self.buildOptimizer(model)
 
@@ -89,7 +97,6 @@ class CenterLossModel(object):
             for epoch in range(epochs):
                 for idx, batchX in enumerate(X):
                     batchy = y[idx]
-                    print (len(batchX), len(batchy))
                     # Construct feed dictionary
                     feed_dict = {self.placeholder['input']: batchX, self.placeholder['labels']: batchy}
                     # Run single weight update
@@ -98,6 +105,10 @@ class CenterLossModel(object):
                     # Compute average loss
                     lossScale = outs[0]
                     print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
+
+
+
+
 
 if __name__ == '__main__':
     model = CenterLossModel([1,2,3], 0.1)
