@@ -95,7 +95,7 @@ class CenterLossModel(object):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
 
         acc, acc_op = tf.metrics.accuracy(labels=tf.argmax(OneHotLabel, 1),
-                                          predictions=tf.argmax(tf.sigmoid(encoded_emb), 1))
+                                          predictions=tf.argmax(encoded_emb, 1))
         return  acc, acc_op
 
 
@@ -116,7 +116,7 @@ class CenterLossModel(object):
         plt.close()
 
 
-    def tarin(self, X, y, epochs=500):
+    def tarin(self, X, y, epochs=3000):
 
         model = self.buildModel()
         loss, opt, acc_op = self.buildOptimizer(model)
@@ -127,15 +127,20 @@ class CenterLossModel(object):
 
             # Train model
             for epoch in range(epochs):
-                # Construct feed dictionary
-                feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
-                # Run single weight update
-                outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
-                # Compute average loss
-                lossScale = outs[0]
-                accScale = outs[2]
+                NumberofBatch = len(X)
+                for batchid in range(NumberofBatch):
+                    batchX, batchy = X[batchid], y[batchid]
 
-                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
+                    # Construct feed dictionary
+                    feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
+                    # Run single weight update
+                    outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
+                    # Compute average loss
+                    lossScale = outs[0]
+                    accScale = outs[2]
+
+                    print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
+
 
             # emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
             # self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
