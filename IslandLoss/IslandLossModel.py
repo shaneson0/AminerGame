@@ -95,7 +95,7 @@ class CenterLossModel(object):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
 
         acc, acc_op = tf.metrics.accuracy(labels=tf.argmax(OneHotLabel, 1),
-                                          predictions=tf.argmax(encoded_emb, 1))
+                                          predictions=tf.argmax(tf.sigmoid(encoded_emb), 1))
         return  acc, acc_op
 
 
