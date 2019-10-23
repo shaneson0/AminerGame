@@ -93,8 +93,8 @@ class CenterLossModel(object):
                 outs = sess.run([loss, opt], feed_dict=feed_dict)
 
                 # Compute average loss
-                loss = outs[0]
-                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(loss))
+                lossScale = outs[0]
+                print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale))
 
 if __name__ == '__main__':
     model = CenterLossModel([1,2,3], 0.1)
