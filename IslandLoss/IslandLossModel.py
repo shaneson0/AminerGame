@@ -153,19 +153,24 @@ class CenterLossModel(object):
             testacc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
             print ("test acc: ", testacc)
 
+
             # check embedding
-            embedding = sess.run(model, feed_dict={self.placeholder['input']: testX[:100], self.placeholder['labels']: testy[:100]})
+            ClusterCheckX = testX[:1000]
+            ClusterCheckY = testy[:1000]
+
+
+            embedding = sess.run(model, feed_dict={self.placeholder['input']: ClusterCheckX, self.placeholder['labels']: ClusterCheckY})
             print (embedding.shape)
             emb_norm = normalize_vectors(embedding)
-            clusters_pred = list(clustering(emb_norm, num_clusters=len(list(set(testy[:100])))))
-            embeddingLabels = self.codeLabel(testy[:100])
+            clusters_pred = list(clustering(emb_norm, num_clusters=len(list(set(ClusterCheckY)))))
+            embeddingLabels = self.codeLabel(ClusterCheckY)
             print ("clusters_pred: ", clusters_pred)
             print ("embeddingLabels: ", embeddingLabels)
             prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, embeddingLabels)
             print('pairwise precision', '{:.5f}'.format(prec),
                   'recall', '{:.5f}'.format(rec),
                   'f1', '{:.5f}'.format(f1))
-            self.tSNEAnanlyse(embedding, labels=testy[:100], trueLabels=testy[:100], savepath=join(settings.OUT_DIR, "test_embedding.jpg"))
+            self.tSNEAnanlyse(embedding, labels=ClusterCheckY, trueLabels=ClusterCheckY, savepath=join(settings.OUT_DIR, "test_embedding.jpg"))
 
 
 if __name__ == '__main__':
