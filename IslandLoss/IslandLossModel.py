@@ -120,6 +120,10 @@ class CenterLossModel(object):
         plt.close()
 
 
+    def codeLabel(self, labels):
+        classes = set(labels)
+        classes_dict = {c: i for i, c in enumerate(classes)}
+        return [classes_dict[l] for l in labels]
 
 
     def tarin(self, batchX, batchy, testX, testy, epochs=3000):
@@ -154,7 +158,8 @@ class CenterLossModel(object):
             print (embedding.shape)
             emb_norm = normalize_vectors(embedding)
             clusters_pred = clustering(emb_norm, num_clusters=len(list(set(testy[:100]))))
-            prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, testy[:100])
+            embeddingLabels = self.codeLabel(testy[:100])
+            prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, embeddingLabels)
             print('pairwise precision', '{:.5f}'.format(prec),
                   'recall', '{:.5f}'.format(rec),
                   'f1', '{:.5f}'.format(f1))
