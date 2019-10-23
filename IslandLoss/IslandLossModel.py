@@ -113,6 +113,14 @@ class CenterLossModel(object):
             plt.savefig(savepath)
         plt.close()
 
+    def compute_accuracy(self, prediction, labels, feed_dict):
+        sess = tf.Session()
+        y_pre = sess.run(prediction, feed_dict)
+        correct_prediction = tf.equal(tf.argmax(y_pre, 1), tf.argmax(tf.sigmoid(labels), 1))
+        accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+        result = sess.run(accuracy, feed_dict=feed_dict)
+        return result
+
     def tarin(self, X, y, epochs=500):
 
         model = self.buildModel()
@@ -131,11 +139,12 @@ class CenterLossModel(object):
                 outs = sess.run([loss, opt], feed_dict=feed_dict)
                 acc, acc_op = self.getAcc(model)
 
-                outs2 = sess.run([acc,acc_op], feed_dict=feed_dict)
+
 
                 # Compute average loss
                 lossScale = outs[0]
-                accScale = outs2[1]
+                OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
+                accScale = self.compute_accuracy(prediction=model, labels=OneHotLabel, feed_dict=feed_dict)
 
                 print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
