@@ -116,6 +116,8 @@ class CenterLossModel(object):
         plt.close()
 
 
+
+
     def tarin(self, batchX, batchy, testX, testy, epochs=3000):
 
         model = self.buildModel()
@@ -143,8 +145,9 @@ class CenterLossModel(object):
             testacc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
             print ("test acc: ", testacc)
 
-            # emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
-            # self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
+            # check embedding
+            embedding = sess.run(model, feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
+            self.tSNEAnanlyse(embedding, labels=testy, trueLabels=testy, savepath=join(settings.OUT_DIR, "test_embedding.jpg"))
 
 
 if __name__ == '__main__':

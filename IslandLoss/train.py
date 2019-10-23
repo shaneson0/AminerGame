@@ -28,3 +28,5 @@ model.tarin(TrainX, TrainY, TestX, TestY)
 
 
 
+
+
