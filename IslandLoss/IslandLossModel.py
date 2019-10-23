@@ -87,9 +87,15 @@ class CenterLossModel(object):
         with tf.control_dependencies([centers_update_op]):
             train_op = optimizer.minimize(loss)
 
+        return loss, train_op
+
+    def getAcc(self, encoded_emb):
+        OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
+
         acc, acc_op = tf.metrics.accuracy(labels=tf.argmax(OneHotLabel, 1),
                                           predictions=tf.argmax(encoded_emb, 1))
-        return loss, train_op, acc, acc_op
+        return  acc, acc_op
+
 
     def tSNEAnanlyse(self, emb, labels, trueLabels, savepath=False):
         plt.figure()
@@ -110,10 +116,12 @@ class CenterLossModel(object):
     def tarin(self, X, y, epochs=500):
 
         model = self.buildModel()
-        loss, opt, acc, acc_op = self.buildOptimizer(model)
+        loss, opt  = self.buildOptimizer(model)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
+
+
 
             # Train model
             for epoch in range(epochs):
@@ -121,6 +129,8 @@ class CenterLossModel(object):
                 feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
                 # Run single weight update
                 outs = sess.run([loss, opt], feed_dict=feed_dict)
+                acc, acc_op = self.getAcc(moel)
+
                 outs2 = sess.run([acc,acc_op], feed_dict=feed_dict)
 
                 # Compute average loss
