@@ -74,20 +74,22 @@ class CenterLossModel(object):
 
         return encoded_emb
 
-    def buildOptimizer(self, encoded_emb):
-        OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
+    def buildOptimizer(self, encoded_emb, labels):
+        OneHotLabel = tf.one_hot(labels, 64)
         loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
             labels= OneHotLabel,
             logits=encoded_emb
         ))
-        centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
+        centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, OneHotLabel, self.alpha, self.num_classes)
         loss = loss + centerloss
 
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
             train_op = optimizer.minimize(loss)
 
-        return loss, train_op
+        acc, acc_op = tf.metrics.accuracy(labels=tf.argmax(OneHotLabel, 1),
+                                          predictions=tf.argmax(encoded_emb, 1))
+        return loss, train_op, acc, acc_op
 
     def getAcc(self, encoded_emb):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
@@ -113,22 +115,14 @@ class CenterLossModel(object):
             plt.savefig(savepath)
         plt.close()
 
-    def compute_accuracy(self, prediction, labels, feed_dict):
-        sess = tf.Session()
-        y_pre = sess.run(prediction, feed_dict)
-        correct_prediction = tf.equal(tf.argmax(y_pre, 1), tf.argmax(tf.sigmoid(labels), 1))
-        accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-        result = sess.run(accuracy, feed_dict=feed_dict)
-        return result
 
     def tarin(self, X, y, epochs=500):
 
         model = self.buildModel()
-        loss, opt  = self.buildOptimizer(model)
+        loss, opt , acc, acc_op  = self.buildOptimizer(model, y)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
-
 
 
             # Train model
@@ -136,15 +130,13 @@ class CenterLossModel(object):
                 # Construct feed dictionary
                 feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
                 # Run single weight update
-                outs = sess.run([loss, opt], feed_dict=feed_dict)
+                outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
                 acc, acc_op = self.getAcc(model)
-
-
 
                 # Compute average loss
                 lossScale = outs[0]
-                OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
-                accScale = self.compute_accuracy(prediction=model, labels=OneHotLabel, feed_dict=feed_dict)
+                accScale = outs[2]
+
 
                 print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
