@@ -74,22 +74,22 @@ class CenterLossModel(object):
 
         return encoded_emb
 
-    def buildOptimizer(self, encoded_emb, labels):
-        OneHotLabel = tf.one_hot(labels, 64)
+    def buildOptimizer(self, encoded_emb):
+        OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
         loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
             labels= OneHotLabel,
             logits=encoded_emb
         ))
-        centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, OneHotLabel, self.alpha, self.num_classes)
+        centerloss, centers, centers_update_op = self.get_center_loss(encoded_emb, self.placeholder['labels'], self.alpha, self.num_classes)
         loss = loss + centerloss
 
         optimizer = tf.train.AdagradOptimizer(learning_rate=0.01)
         with tf.control_dependencies([centers_update_op]):
             train_op = optimizer.minimize(loss)
 
-        acc, acc_op = tf.metrics.accuracy(labels=tf.argmax(OneHotLabel, 1),
-                                          predictions=tf.argmax(encoded_emb, 1))
-        return loss, train_op, acc, acc_op
+        _acc, acc_op = tf.metrics.accuracy(OneHotLabel,encoded_emb,name="my_metric")
+
+        return loss, train_op, acc_op
 
     def getAcc(self, encoded_emb):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
@@ -119,7 +119,7 @@ class CenterLossModel(object):
     def tarin(self, X, y, epochs=500):
 
         model = self.buildModel()
-        loss, opt , acc, acc_op  = self.buildOptimizer(model, y)
+        loss, opt, acc_op = self.buildOptimizer(model)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -131,12 +131,9 @@ class CenterLossModel(object):
                 feed_dict = {self.placeholder['input']: X, self.placeholder['labels']: y}
                 # Run single weight update
                 outs = sess.run([loss, opt, acc_op], feed_dict=feed_dict)
-                acc, acc_op = self.getAcc(model)
-
                 # Compute average loss
                 lossScale = outs[0]
                 accScale = outs[2]
-
 
                 print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 

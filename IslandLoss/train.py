@@ -21,7 +21,7 @@ print ("max Trainy: ", max(TrainY))
 # x_batch, y_batch = get_Batch(TrainX, TrainY, 1000)
 # print (TrainX, TrainY)
 
-model.tarin(TrainX, TrainY.reshape(-1,1))
+model.tarin(TrainX, TrainY)
 
 
 
