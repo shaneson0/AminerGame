@@ -89,7 +89,7 @@ class CenterLossModel(object):
 
         _acc, acc_op = tf.metrics.accuracy(OneHotLabel,encoded_emb,name="my_metric")
 
-        return loss, train_op, acc, acc_op
+        return loss, train_op, _acc, acc_op
 
     def getAcc(self, encoded_emb):
         OneHotLabel = tf.one_hot(self.placeholder['labels'], 64)
@@ -141,8 +141,8 @@ class CenterLossModel(object):
 
                     print("Epoch:", '%04d' % (epoch + 1), "loss=", "{:.5f}".format(lossScale), ',acc = {:.5f}'.format(accScale))
 
-            acc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
-            print ("test acc: ", acc)
+            testacc = sess.run([acc], feed_dict={self.placeholder['input']: testX, self.placeholder['labels']: testy})
+            print ("test acc: ", testacc)
 
             # emb = sess.run(model, feed_dict=feed_dict)  # z_mean is better
             # self.tSNEAnanlyse(emb, y, y, savepath=join(settings.ISLAND_LOSS_DIR, 'IslandLosscheck.jpg'))
