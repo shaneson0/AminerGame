@@ -51,7 +51,16 @@ def get_center_loss(features, labels, alpha, num_classes):
 def l2Norm(x):
     return K.l2_normalize(x, axis=-1)
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i + n]
+
 TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
+
+TrainX = list(chunks(TrainX, len(TrainX)))
+TrainY = list(chunks(TrainY, len(TrainX)))
+
 
 print ("pass")
 
@@ -89,42 +98,45 @@ with tf.name_scope('loss/'):
     tf.summary.scalar('TotalLoss', total_loss)
 
 
-# optimizer = tf.train.AdamOptimizer(0.001)
-#
-# with tf.control_dependencies([centers_update_op]):
-#     train_op = optimizer.minimize(total_loss, global_step=global_step)
-#
-# summary_op = tf.summary.merge_all()
-# sess = tf.Session()
-# sess.run(tf.global_variables_initializer())
-#
-# # TrainX, TrainY
-# mean_train_x = np.mean(TrainX, axis=0)
-#
-#
-# step = sess.run(global_step)
-#
-# while step <= 3000:
-#     _, summary_str, train_acc = sess.run(
-#         [train_op, summary_op, accuracy],
-#         feed_dict={
-#             input_images: TrainX - mean_train_x,
-#             labels: TrainY,
-#         })
-#     step += 1
-#     print(("step: {}, train_acc:{:.4f}".
-#            format(step, train_acc)))
-#
-#     if step % 200 == 0:
-#         vali_data = TestX - mean_train_x
-#         vali_acc = sess.run(
-#             accuracy,
-#             feed_dict={
-#                 input_images: vali_data,
-#                 labels: TestY
-#             })
-#         print(("===== step: {}, train_acc:{:.4f}, vali_acc:{:.4f} ====".
-#               format(step, train_acc, vali_acc)))
+optimizer = tf.train.AdamOptimizer(0.001)
+
+with tf.control_dependencies([centers_update_op]):
+    train_op = optimizer.minimize(total_loss, global_step=global_step)
+
+summary_op = tf.summary.merge_all()
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+# TrainX, TrainY
+mean_train_x = np.mean(TrainX, axis=0)
+
+
+step = sess.run(global_step)
+
+while step <= 3000:
+
+    for batchid, batchX in enumerate(TrainX):
+        batchy = TrainY[batchid]
+        _, summary_str, train_acc = sess.run(
+            [train_op, summary_op, accuracy],
+            feed_dict={
+                input_images: batchX - mean_train_x,
+                labels: batchy,
+            })
+
+
+    vali_data = TestX - mean_train_x
+    vali_acc = sess.run(
+        accuracy,
+        feed_dict={
+            input_images: vali_data,
+            labels: TestY
+        })
+
+    print(("===== step: {}, train_acc:{:.4f}, vali_acc:{:.4f} ====".
+          format(step, train_acc, vali_acc)))
+
+    step += 1
 
 
 
