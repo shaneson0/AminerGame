@@ -58,6 +58,9 @@ def chunks(l, n):
 
 TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 
+# TrainX, TrainY
+mean_train_x = np.mean(TrainX, axis=0)
+
 TrainX = list(chunks(TrainX, 5000))
 TrainY = list(chunks(TrainY, 5000))
 
@@ -107,8 +110,7 @@ summary_op = tf.summary.merge_all()
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
-# TrainX, TrainY
-mean_train_x = np.mean(TrainX, axis=0)
+
 
 print(TrainX.shape)
 print(mean_train_x.shape)
