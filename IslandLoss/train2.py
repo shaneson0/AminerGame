@@ -58,8 +58,8 @@ def chunks(l, n):
 
 TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 
-TrainX = list(chunks(TrainX, len(TrainX)))
-TrainY = list(chunks(TrainY, len(TrainX)))
+TrainX = list(chunks(TrainX, 5000))
+TrainY = list(chunks(TrainY, 5000))
 
 
 print ("pass")
