@@ -2,7 +2,6 @@
 import os
 import numpy as np
 import tensorflow as tf
-import tflearn
 from keras import backend as K
 from IslandLoss.prepareTrainData import prepareData
 
