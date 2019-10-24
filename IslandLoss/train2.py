@@ -110,6 +110,8 @@ sess.run(tf.global_variables_initializer())
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
 
+print(TrainX.shape)
+print(mean_train_x.shape)
 
 step = sess.run(global_step)
 
