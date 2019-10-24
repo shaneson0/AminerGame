@@ -53,6 +53,7 @@ def l2Norm(x):
 
 TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 
+print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
