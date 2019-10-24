@@ -100,6 +100,7 @@ sess.run(tf.global_variables_initializer())
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
 
+
 step = sess.run(global_step)
 
 while step <= 3000:
@@ -110,6 +111,8 @@ while step <= 3000:
             labels: TrainY,
         })
     step += 1
+    print(("step: {}, train_acc:{:.4f}".
+           format(step, train_acc)))
 
     if step % 200 == 0:
         vali_data = TestX - mean_train_x
@@ -119,7 +122,7 @@ while step <= 3000:
                 input_images: vali_data,
                 labels: TestY
             })
-        print(("step: {}, train_acc:{:.4f}, vali_acc:{:.4f}".
+        print(("===== step: {}, train_acc:{:.4f}, vali_acc:{:.4f} ====".
               format(step, train_acc, vali_acc)))
 
 
