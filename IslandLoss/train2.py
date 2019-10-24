@@ -61,8 +61,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
 
-TrainX = list(chunks(TrainX, 5000))
-TrainY = list(chunks(TrainY, 5000))
+TrainX = list(chunks(TrainX, 10000))
+TrainY = list(chunks(TrainY, 10000))
 
 
 print ("pass")
@@ -82,7 +82,7 @@ layer1 = tf.keras.layers.Dense(100, activation='relu', name='first_emb_layer')(i
 layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer')(layer1)
 
 feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[64])(layer2)
-logits = tf.keras.layers.Dense(NUM_CLASSES, activation='relu')(feature)
+logits = tf.keras.layers.Dense(NUM_CLASSES, activation='relu', kernel_regularizer=tf.keras.regularizers.l1(0.01))(feature)
 
 with tf.name_scope('loss'):
     with tf.name_scope('center_loss'):
