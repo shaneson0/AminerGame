@@ -72,8 +72,8 @@ print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
-CENTER_LOSS_ALPHA = 1.0
-Island_Loss_ALPHA = 1.0
+CENTER_LOSS_ALPHA = 0.5
+Island_Loss_ALPHA = 0.5
 ratio = 0.0001
 epochs = 3000
 
