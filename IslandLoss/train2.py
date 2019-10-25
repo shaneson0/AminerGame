@@ -164,7 +164,7 @@ EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
 
 from os.path import join
 from utils import settings
-saver = tf.train.Saver({"feature": feature})
+saver = tf.train.Saver()
 saver.save(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
 
 
