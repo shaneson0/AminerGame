@@ -5,6 +5,7 @@ import tensorflow as tf
 from keras import backend as K
 from IslandLoss.prepareTrainData import prepareData
 from utils import EmbedingCheck
+from IslandLoss import get_lc_center_loss
 
 def get_center_loss(features, labels, alpha, num_classes):
     """获取center loss及center的更新op
@@ -72,6 +73,7 @@ print ("pass")
 Embedding = 100
 NUM_CLASSES = NumberOfClass
 CENTER_LOSS_ALPHA = 0.0001
+Island_Loss_ALPHA = 0.0005
 ratio = 0.0001
 
 with tf.name_scope('input'):
@@ -92,7 +94,8 @@ logits = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(feature)
 
 with tf.name_scope('loss'):
     with tf.name_scope('center_loss'):
-        center_loss, centers, centers_update_op = get_center_loss(feature, labels, CENTER_LOSS_ALPHA, NUM_CLASSES)
+        # center_loss, centers, centers_update_op = get_center_loss(feature, labels, CENTER_LOSS_ALPHA, NUM_CLASSES)
+        center_loss, centers, centers_update_op, _, _ = get_lc_center_loss(feature, labels, CENTER_LOSS_ALPHA, Island_Loss_ALPHA, NUM_CLASSES)
     with tf.name_scope('softmax_loss'):
         softmax_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=logits))
     with tf.name_scope('total_loss'):
