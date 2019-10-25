@@ -64,8 +64,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
-# TrainX = list(chunks(TrainX, len(TrainX)))
-# TrainY = list(chunks(TrainY, len(TrainX)))
+TrainX = list(chunks(TrainX, 10000))
+TrainY = list(chunks(TrainY, 10000))
 
 
 print ("pass")
@@ -112,12 +112,11 @@ with tf.name_scope('loss/'):
     tf.summary.scalar('TotalLoss', total_loss)
 
 
-# optimizer = tf.train.AdamOptimizer(0.01)
-optimizer = tf.keras.optimizers.Nadam(0.01)
+optimizer = tf.train.AdamOptimizer(0.01)
 
 
 with tf.control_dependencies([centers_update_op]):
-    train_op = optimizer.minimize(total_loss)
+    train_op = optimizer.minimize(total_loss, global_step=global_step)
 
 summary_op = tf.summary.merge_all()
 sess = tf.Session()
@@ -129,17 +128,17 @@ step = sess.run(global_step)
 vali_acc = 0.0
 while step <= epochs:
 
-    # for batchid, batchX in enumerate(TrainX):
-    #     batchy = TrainY[batchid]
-    batchX = TrainX
-    batchy = TrainY
-    _, summary_str, train_acc, softmaxloss, totalloss = sess.run(
-        [train_op, summary_op, accuracy, softmax_loss, total_loss],
-        feed_dict={
-            input_images: batchX - mean_train_x,
-            labels: batchy,
-        })
-    print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
+    for batchid, batchX in enumerate(TrainX):
+        batchy = TrainY[batchid]
+    # batchX = TrainX
+    # batchy = TrainY
+        _, summary_str, train_acc, softmaxloss, totalloss = sess.run(
+            [train_op, summary_op, accuracy, softmax_loss, total_loss],
+            feed_dict={
+                input_images: batchX - mean_train_x,
+                labels: batchy,
+            })
+        print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
 
 
     vali_acc = sess.run(
