@@ -117,7 +117,7 @@ optimizer = tf.keras.optimizers.Nadam(0.01)
 
 
 with tf.control_dependencies([centers_update_op]):
-    train_op = optimizer.minimize(total_loss, global_step=global_step)
+    train_op = optimizer.minimize(total_loss)
 
 summary_op = tf.summary.merge_all()
 sess = tf.Session()
