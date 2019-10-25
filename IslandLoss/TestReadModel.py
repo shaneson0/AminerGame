@@ -46,7 +46,7 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
     Features = sess.run(feature, feed_dict={
-        'input_images': TestX - mean_test_x,
-        'labels': TestY
+        input_images: TestX - mean_test_x,
+        labels: TestY
     })
     EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
