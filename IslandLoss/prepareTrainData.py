@@ -108,7 +108,8 @@ def preprocessLabels():
     classes_dict, numberofCluss = encode_labels2(list(NewLabelDict.values()))
 
     for key in NewLabelDict:
-        NewLabelDict[key] = classes_dict[key]
+        oldLabel = NewLabelDict[key]
+        NewLabelDict[key] = classes_dict[oldLabel]
 
     return NewLabelDict, numberofCluss
 
