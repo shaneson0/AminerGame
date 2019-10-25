@@ -60,6 +60,7 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
+mean_test_x = np.mean(TestX, axis=0)
 
 TrainX = list(chunks(TrainX, 5000))
 TrainY = list(chunks(TrainY, 5000))
@@ -138,11 +139,10 @@ while step <= 3000:
         print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
 
 
-    vali_data = TestX - mean_train_x
     vali_acc = sess.run(
         accuracy,
         feed_dict={
-            input_images: vali_data - mean_train_x,
+            input_images: TestX - mean_test_x,
             labels: TestY
         })
 
