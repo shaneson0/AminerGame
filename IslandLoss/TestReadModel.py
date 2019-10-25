@@ -4,6 +4,7 @@ from utils import settings
 import numpy as np
 from IslandLoss.prepareTrainData import prepareData
 from utils import EmbedingCheck
+from keras import backend as K
 
 
 TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
