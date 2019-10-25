@@ -121,7 +121,7 @@ sess.run(tf.global_variables_initializer())
 
 step = sess.run(global_step)
 
-while step <= 3000:
+while step <= 5000:
 
     for batchid, batchX in enumerate(TrainX):
         batchy = TrainY[batchid]
