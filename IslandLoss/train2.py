@@ -62,8 +62,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
-TrainX = list(chunks(TrainX, len(TrainX)))
-TrainY = list(chunks(TrainY, len(TrainX)))
+# TrainX = list(chunks(TrainX, len(TrainX)))
+# TrainY = list(chunks(TrainY, len(TrainX)))
 
 
 print ("pass")
@@ -123,15 +123,17 @@ step = sess.run(global_step)
 
 while step <= 3000:
 
-    for batchid, batchX in enumerate(TrainX):
-        batchy = TrainY[batchid]
-        _, summary_str, train_acc, softmaxloss, totalloss = sess.run(
-            [train_op, summary_op, accuracy, softmax_loss, total_loss],
-            feed_dict={
-                input_images: batchX - mean_train_x,
-                labels: batchy,
-            })
-        print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
+    # for batchid, batchX in enumerate(TrainX):
+    #     batchy = TrainY[batchid]
+    batchX = TrainX
+    batchy = TrainY
+    _, summary_str, train_acc, softmaxloss, totalloss = sess.run(
+        [train_op, summary_op, accuracy, softmax_loss, total_loss],
+        feed_dict={
+            input_images: batchX - mean_train_x,
+            labels: batchy,
+        })
+    print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
 
 
     vali_acc = sess.run(
