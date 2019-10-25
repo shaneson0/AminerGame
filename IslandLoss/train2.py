@@ -112,7 +112,8 @@ with tf.name_scope('loss/'):
     tf.summary.scalar('TotalLoss', total_loss)
 
 
-optimizer = tf.train.AdamOptimizer(0.01)
+# optimizer = tf.train.AdamOptimizer(0.01)
+optimizer = tf.keras.optimizers.Nadam(0.01)
 
 
 with tf.control_dependencies([centers_update_op]):
