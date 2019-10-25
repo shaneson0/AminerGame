@@ -64,16 +64,16 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
-TrainX = list(chunks(TrainX, 1000))
-TrainY = list(chunks(TrainY, 1000))
+TrainX = list(chunks(TrainX, 500))
+TrainY = list(chunks(TrainY, 500))
 
 
 print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
-CENTER_LOSS_ALPHA = 0.0001
-Island_Loss_ALPHA = 1.0
+CENTER_LOSS_ALPHA = 0.05
+Island_Loss_ALPHA = 0.05
 ratio = 0.0005
 epochs = 3000
 
@@ -132,13 +132,13 @@ while step <= epochs:
         batchy = TrainY[batchid]
     # batchX = TrainX
     # batchy = TrainY
-        _, summary_str, train_acc, softmaxloss, totalloss = sess.run(
-            [train_op, summary_op, accuracy, softmax_loss, total_loss],
+        _, summary_str, train_acc, softmaxloss, totalloss, centerloss = sess.run(
+            [train_op, summary_op, accuracy, softmax_loss, total_loss, center_loss],
             feed_dict={
                 input_images: batchX - mean_train_x,
                 labels: batchy,
             })
-        print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
+        print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss , ', center_loss: ', centerloss)
 
 
     vali_acc = sess.run(
