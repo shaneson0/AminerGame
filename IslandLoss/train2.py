@@ -125,7 +125,7 @@ sess.run(tf.global_variables_initializer())
 
 
 step = sess.run(global_step)
-
+vali_acc = 0.0
 while step <= epochs:
 
     # for batchid, batchX in enumerate(TrainX):
@@ -165,7 +165,7 @@ EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
 from os.path import join
 from utils import settings
 saver = tf.train.Saver()
-saver.save(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
+saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_%s"%(vali_acc)))
 
 
 print ("End..")
