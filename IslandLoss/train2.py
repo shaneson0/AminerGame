@@ -69,8 +69,8 @@ print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
-CENTER_LOSS_ALPHA = 0.5
-ratio = 1
+CENTER_LOSS_ALPHA = 1.0
+ratio = 5.0
 
 with tf.name_scope('input'):
     input_images = tf.placeholder(tf.float32, shape=(None,Embedding), name='input_images')
