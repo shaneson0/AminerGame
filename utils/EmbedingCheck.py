@@ -8,7 +8,7 @@ from local.gae.preprocessing import preprocess_graph, construct_feed_dict, \
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 
-def tSNEAnanlyse(self, emb, labels, trueLabels, savepath=False):
+def tSNEAnanlyse(emb, labels, trueLabels, savepath=False):
     plt.figure()
     # labels = np.array(labels) + 2
     X_new = TSNE(learning_rate=100).fit_transform(emb)
