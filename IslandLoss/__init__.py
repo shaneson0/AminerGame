@@ -8,8 +8,12 @@ def get_lc_center_loss(features, labels, alpha,alpha1, num_classes):
 
     len_features = features.get_shape()[1]
 
+    # centers = tf.get_variable('centers', [num_classes, len_features], dtype=tf.float32,
+    #                           initializer=tf.contrib.layers.xavier_initializer(), trainable=False)
+
     centers = tf.get_variable('centers', [num_classes, len_features], dtype=tf.float32,
-                              initializer=tf.contrib.layers.xavier_initializer(), trainable=False)
+                              initializer=tf.uniform_unit_scaling_initializer(), trainable=False)
+
     labels = tf.reshape(labels, [-1])
 
     centers_batch = tf.gather(centers, labels)

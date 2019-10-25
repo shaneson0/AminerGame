@@ -83,10 +83,10 @@ with tf.name_scope('input'):
 global_step = tf.Variable(0, trainable=False, name='global_step')
 
 layer1 = tf.keras.layers.Dense(100, activation='relu', name='first_emb_layer',  kernel_regularizer=tf.keras.regularizers.l2(0.01))(input_images)
-layer1 = tf.keras.layers.Dropout(0.9)(layer1)
+layer1 = tf.keras.layers.Dropout(0.6)(layer1)
 
 layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer', kernel_regularizer=tf.keras.regularizers.l2(0.01))(layer1)
-layer2 = tf.keras.layers.Dropout(0.9)(layer2)
+layer2 = tf.keras.layers.Dropout(0.6)(layer2)
 
 
 feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[32])(layer2)
@@ -99,8 +99,8 @@ with tf.name_scope('loss'):
     with tf.name_scope('softmax_loss'):
         softmax_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=logits))
     with tf.name_scope('total_loss'):
-        # total_loss = softmax_loss + ratio * center_loss
-        total_loss = softmax_loss
+        total_loss = softmax_loss + ratio * center_loss
+        # total_loss = softmax_loss
 
 with tf.name_scope('acc'):
     accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.arg_max(logits, 1), labels), tf.float32))
@@ -114,8 +114,8 @@ with tf.name_scope('loss/'):
 optimizer = tf.train.AdamOptimizer(0.01)
 
 
-# with tf.control_dependencies([centers_update_op]):
-train_op = optimizer.minimize(total_loss, global_step=global_step)
+with tf.control_dependencies([centers_update_op]):
+    train_op = optimizer.minimize(total_loss, global_step=global_step)
 
 summary_op = tf.summary.merge_all()
 sess = tf.Session()
