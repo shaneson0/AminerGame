@@ -62,8 +62,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
-TrainX = list(chunks(TrainX, 5000))
-TrainY = list(chunks(TrainY, 5000))
+TrainX = list(chunks(TrainX, len(TrainX)))
+TrainY = list(chunks(TrainY, len(TrainX)))
 
 
 print ("pass")
@@ -121,7 +121,7 @@ sess.run(tf.global_variables_initializer())
 
 step = sess.run(global_step)
 
-while step <= 5000:
+while step <= 3000:
 
     for batchid, batchX in enumerate(TrainX):
         batchy = TrainY[batchid]
