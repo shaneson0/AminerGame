@@ -72,9 +72,9 @@ print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
-CENTER_LOSS_ALPHA = 0.0001
+CENTER_LOSS_ALPHA = 0.0005
 Island_Loss_ALPHA = 0.0005
-ratio = 0.0001
+ratio = 0.0005
 
 with tf.name_scope('input'):
     input_images = tf.placeholder(tf.float32, shape=(None,Embedding), name='input_images')
@@ -125,7 +125,7 @@ sess.run(tf.global_variables_initializer())
 
 step = sess.run(global_step)
 
-while step <= 3000:
+while step <= 5000:
 
     # for batchid, batchX in enumerate(TrainX):
     #     batchy = TrainY[batchid]
