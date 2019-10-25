@@ -40,9 +40,9 @@ logits = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(feature)
 export_path = join(settings.ISLAND_LOSS_DIR, "feature_model")
 
 
-
+saver = tf.train.Saver()
 with tf.Session(graph=tf.Graph()) as sess:
-    tf.train.Saver.restore(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
+    saver.restore(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
 
     Features = sess.run(feature, feed_dict={
         'input_images': TestX - mean_test_x,
