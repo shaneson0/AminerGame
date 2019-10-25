@@ -79,7 +79,7 @@ with tf.name_scope('input'):
 
 global_step = tf.Variable(0, trainable=False, name='global_step')
 
-layer1 = tf.keras.layers.Dense(100, activation='relu', name='first_emb_layer')(input_images)
+layer1 = tf.keras.layers.Dense(100, activation='relu', name='first_emb_layer',  kernel_regularizer=tf.keras.regularizers.l2(0.1))(input_images)
 layer1 = tf.keras.layers.Dropout(0.9)(layer1)
 
 layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer', kernel_regularizer=tf.keras.regularizers.l2(0.1))(layer1)
