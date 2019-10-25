@@ -24,6 +24,12 @@ def encode_labels(train_author):
     classes_dict = {c: i for i, c in enumerate(classes)}
     return classes_dict, numberofCluss
 
+def encode_labels2(labels):
+    classes = set(labels)
+    numberofCluss = len(list(set(labels)))
+    classes_dict = {c: i for i, c in enumerate(classes)}
+    return classes_dict, numberofCluss
+
 def genPublicationLabel():
     Label = {}
     with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
@@ -98,10 +104,11 @@ def preprocessLabels():
         if label in ValidLabel:
             NewLabelDict[key] = label
 
-    # print (NewLabelDict)
-    # print (len(NewLabelDict.keys()))
-    # print (len(set(NewLabelDict.values())))
-    numberofCluss = len(set(NewLabelDict.values()))
+
+    classes_dict, numberofCluss = encode_labels2(list(NewLabelDict.values()))
+
+    for key in NewLabelDict:
+        NewLabelDict[key] = classes_dict[key]
 
     return NewLabelDict, numberofCluss
 
