@@ -38,19 +38,13 @@ def genPublicationLabel():
     return Label, numberofCluss
 
 def prepareData():
-    # prepare Data
-    TrainPids = []
-    with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
-        train_author = json.load(fp)
-        fp.close()
-    for name in train_author.keys():
-        for aid in train_author[name]:
-            TrainPids = TrainPids + train_author[name][aid]
+    LabelDict, numberofCluss = preprocessLabels()
+    TrainPids = np.array(LabelDict.keys())
 
     TrainPids = np.array(TrainPids)
 
     TrainPids, TestPids = train_test_split(TrainPids, test_size=0.33, random_state=42)
-    LabelDict, numberofCluss = preprocessLabels()
+
 
     LMDB_NAME_EMB = "publication.emb.weighted"
     lc_emb = LMDBClient(LMDB_NAME_EMB)
