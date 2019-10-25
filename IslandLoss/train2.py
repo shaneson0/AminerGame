@@ -75,6 +75,7 @@ NUM_CLASSES = NumberOfClass
 CENTER_LOSS_ALPHA = 0.0001
 Island_Loss_ALPHA = 1.0
 ratio = 0.0001
+epochs = 20000
 
 with tf.name_scope('input'):
     input_images = tf.placeholder(tf.float32, shape=(None,Embedding), name='input_images')
@@ -125,7 +126,7 @@ sess.run(tf.global_variables_initializer())
 
 step = sess.run(global_step)
 
-while step <= 5000:
+while step <= epochs:
 
     # for batchid, batchX in enumerate(TrainX):
     #     batchy = TrainY[batchid]
