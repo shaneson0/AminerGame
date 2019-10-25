@@ -85,13 +85,8 @@ layer1 = tf.keras.layers.Dropout(0.9)(layer1)
 layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer')(layer1)
 layer2 = tf.keras.layers.Dropout(0.9)(layer2)
 
-layer3 = tf.keras.layers.Dense(32, activation='relu', name='last_emb_layer')(layer2)
-layer3 = tf.keras.layers.Dropout(0.9)(layer3)
 
-layer4 = tf.keras.layers.Dense(32, activation='relu', name='last_emb_layer')(layer3)
-layer4 = tf.keras.layers.Dropout(0.9)(layer4)
-
-feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[32])(layer4)
+feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[32])(layer2)
 logits = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax', kernel_regularizer=tf.keras.regularizers.l2(0.01))(feature)
 
 with tf.name_scope('loss'):
