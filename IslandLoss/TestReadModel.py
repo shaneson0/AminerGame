@@ -43,7 +43,6 @@ export_path = join(settings.ISLAND_LOSS_DIR, "feature_model")
 saver = tf.train.Saver()
 with tf.Session() as sess:
     saver.restore(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
-    sess.run(tf.global_variables_initializer())
 
     Features = sess.run(feature, feed_dict={
         input_images: TestX - mean_test_x,
