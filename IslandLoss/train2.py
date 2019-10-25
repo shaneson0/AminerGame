@@ -61,16 +61,16 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
 
-TrainX = list(chunks(TrainX, 10000))
-TrainY = list(chunks(TrainY, 10000))
+TrainX = list(chunks(TrainX, 20000))
+TrainY = list(chunks(TrainY, 20000))
 
 
 print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
-CENTER_LOSS_ALPHA = 1.0
-ratio = 5.0
+CENTER_LOSS_ALPHA = 0.01
+ratio = 0.5
 
 with tf.name_scope('input'):
     input_images = tf.placeholder(tf.float32, shape=(None,Embedding), name='input_images')
@@ -91,7 +91,8 @@ with tf.name_scope('loss'):
     with tf.name_scope('softmax_loss'):
         softmax_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=logits))
     with tf.name_scope('total_loss'):
-        total_loss = softmax_loss + ratio * center_loss
+        # total_loss = softmax_loss + ratio * center_loss
+        total_loss = softmax_loss
 
 with tf.name_scope('acc'):
     accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.arg_max(logits, 1), labels), tf.float32))
@@ -105,7 +106,7 @@ with tf.name_scope('loss/'):
 optimizer = tf.train.AdamOptimizer(0.01)
 
 with tf.control_dependencies([centers_update_op]):
-    train_op = optimizer.minimize(total_loss, global_step=global_step)
+# train_op = optimizer.minimize(total_loss, global_step=global_step)
 
 summary_op = tf.summary.merge_all()
 sess = tf.Session()
@@ -119,13 +120,13 @@ while step <= 3000:
 
     for batchid, batchX in enumerate(TrainX):
         batchy = TrainY[batchid]
-        _, summary_str, train_acc, centerloss, softmaxloss, totalloss = sess.run(
-            [train_op, summary_op, accuracy, center_loss, softmax_loss, total_loss],
+        _, summary_str, train_acc, softmaxloss, totalloss = sess.run(
+            [train_op, summary_op, accuracy, softmax_loss, total_loss],
             feed_dict={
                 input_images: batchX - mean_train_x,
                 labels: batchy,
             })
-        print ("centerloss: ", centerloss,", softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
+        print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
 
 
     vali_data = TestX - mean_train_x
