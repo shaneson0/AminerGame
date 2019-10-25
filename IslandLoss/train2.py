@@ -64,8 +64,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
-TrainX = list(chunks(TrainX, 10000))
-TrainY = list(chunks(TrainY, 10000))
+TrainX = list(chunks(TrainX, 1000))
+TrainY = list(chunks(TrainY, 1000))
 
 
 print ("pass")
