@@ -12,7 +12,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 mean_test_x = np.mean(TestX, axis=0)
 
 with tf.Session(graph=tf.Graph()) as sess:
-    tf.saved_model.loader.load(sess, export_path)
+    tf.saved_model.loader.load(export_path)
+    tf.saver.restore(sess, tf.train.latest_checkpoint('./'))
     graph = tf.get_default_graph()
     print(graph.get_operations())
 
