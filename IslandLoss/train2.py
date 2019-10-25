@@ -80,8 +80,9 @@ global_step = tf.Variable(0, trainable=False, name='global_step')
 
 layer1 = tf.keras.layers.Dense(100, activation='relu', name='first_emb_layer')(input_images)
 layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer')(layer1)
+layer3 = tf.keras.layers.Dense(32, activation='relu', name='last_emb_layer')(layer1)
 
-feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[64])(layer2)
+feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[32])(layer2)
 logits = tf.keras.layers.Dense(NUM_CLASSES, kernel_regularizer=tf.keras.regularizers.l2(0.01))(feature)
 
 with tf.name_scope('loss'):
@@ -101,7 +102,7 @@ with tf.name_scope('loss/'):
     tf.summary.scalar('TotalLoss', total_loss)
 
 
-optimizer = tf.train.AdamOptimizer(0.001)
+optimizer = tf.train.AdamOptimizer(0.01)
 
 with tf.control_dependencies([centers_update_op]):
     train_op = optimizer.minimize(total_loss, global_step=global_step)
@@ -118,12 +119,13 @@ while step <= 3000:
 
     for batchid, batchX in enumerate(TrainX):
         batchy = TrainY[batchid]
-        _, summary_str, train_acc = sess.run(
-            [train_op, summary_op, accuracy],
+        _, summary_str, train_acc, centerloss, softmaxloss, totalloss = sess.run(
+            [train_op, summary_op, accuracy, center_loss, softmax_loss, total_loss],
             feed_dict={
                 input_images: batchX - mean_train_x,
                 labels: batchy,
             })
+        print ("centerloss: ", centerloss,", softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
 
 
     vali_data = TestX - mean_train_x
