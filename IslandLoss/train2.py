@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 from keras import backend as K
 from IslandLoss.prepareTrainData import prepareData
+from utils import EmbedingCheck
 
 def get_center_loss(features, labels, alpha, num_classes):
     """获取center loss及center的更新op
@@ -148,5 +149,10 @@ while step <= 3000:
 
     step += 1
 
+Features = sess.run(feature,         feed_dict={
+            input_images: TestX - mean_test_x,
+            labels: TestY
+        })
+EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
 
 print ("End..")
