@@ -48,7 +48,7 @@ def prepareData():
     TrainPids = np.array(list(LabelDict.keys()))
     TrainPids = np.array(TrainPids)
 
-    TrainPids, TestPids = train_test_split(TrainPids, test_size=0.20, random_state=42)
+    TrainPids, TestPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
 
 
     LMDB_NAME_EMB = "publication.emb.weighted"
