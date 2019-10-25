@@ -142,7 +142,7 @@ while step <= 3000:
     vali_acc = sess.run(
         accuracy,
         feed_dict={
-            input_images: vali_data,
+            input_images: vali_data - mean_train_x,
             labels: TestY
         })
 
