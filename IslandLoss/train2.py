@@ -86,26 +86,27 @@ feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[32])(l
 logits = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax', kernel_regularizer=tf.keras.regularizers.l2(0.01))(feature)
 
 with tf.name_scope('loss'):
-    with tf.name_scope('center_loss'):
-        center_loss, centers, centers_update_op = get_center_loss(feature, labels, CENTER_LOSS_ALPHA, NUM_CLASSES)
+    # with tf.name_scope('center_loss'):
+    #     center_loss, centers, centers_update_op = get_center_loss(feature, labels, CENTER_LOSS_ALPHA, NUM_CLASSES)
     with tf.name_scope('softmax_loss'):
         softmax_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=logits))
     with tf.name_scope('total_loss'):
-        total_loss = softmax_loss + ratio * center_loss
+        # total_loss = softmax_loss + ratio * center_loss
+        total_loss = softmax_loss
 
 with tf.name_scope('acc'):
     accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.arg_max(logits, 1), labels), tf.float32))
 
 with tf.name_scope('loss/'):
-    tf.summary.scalar('CenterLoss', center_loss)
+    # tf.summary.scalar('CenterLoss', center_loss)
     tf.summary.scalar('SoftmaxLoss', softmax_loss)
     tf.summary.scalar('TotalLoss', total_loss)
 
 
 optimizer = tf.train.AdamOptimizer(0.01)
 
-with tf.control_dependencies([centers_update_op]):
-    train_op = optimizer.minimize(total_loss, global_step=global_step)
+# with tf.control_dependencies([centers_update_op]):
+train_op = optimizer.minimize(total_loss, global_step=global_step)
 
 summary_op = tf.summary.merge_all()
 sess = tf.Session()
@@ -119,13 +120,13 @@ while step <= 3000:
 
     for batchid, batchX in enumerate(TrainX):
         batchy = TrainY[batchid]
-        _, summary_str, train_acc, centerloss, softmaxloss, totalloss = sess.run(
-            [train_op, summary_op, accuracy, center_loss, softmax_loss, total_loss],
+        _, summary_str, train_acc, softmaxloss, totalloss = sess.run(
+            [train_op, summary_op, accuracy, softmax_loss, total_loss],
             feed_dict={
                 input_images: batchX - mean_train_x,
                 labels: batchy,
             })
-        print ("centerloss: ", centerloss,", softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
+        print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss )
 
 
     vali_data = TestX - mean_train_x
