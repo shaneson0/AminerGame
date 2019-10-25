@@ -69,7 +69,7 @@ print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
-CENTER_LOSS_ALPHA = 0.01
+CENTER_LOSS_ALPHA = 0.002
 ratio = 0.002
 
 with tf.name_scope('input'):
