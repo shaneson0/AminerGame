@@ -64,8 +64,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
 mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
-TrainX = list(chunks(TrainX, 500))
-TrainY = list(chunks(TrainY, 500))
+TrainX = list(chunks(TrainX, 2000))
+TrainY = list(chunks(TrainY, 2000))
 
 
 print ("pass")
@@ -157,7 +157,7 @@ Features = sess.run(feature,         feed_dict={
             input_images: TestX - mean_test_x,
             labels: TestY
         })
-EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
+f1 = EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
 
 
 # save model
@@ -165,7 +165,7 @@ EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
 from os.path import join
 from utils import settings
 saver = tf.train.Saver()
-saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_%s"%(vali_acc)))
+saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_f1_%s"%(f1)))
 
 
 print ("End..")
