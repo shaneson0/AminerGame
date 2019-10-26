@@ -7,7 +7,7 @@ from utils import EmbedingCheck
 from keras import backend as K
 
 
-TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
+TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally, pids = prepareData()
 mean_test_x = np.mean(TestX, axis=0)
 
 Embedding = 100
