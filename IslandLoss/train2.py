@@ -64,8 +64,8 @@ TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally, pids = prepareData()
 mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
-TrainX = list(chunks(TrainX, 2000))
-TrainY = list(chunks(TrainY, 2000))
+TrainX = list(chunks(TrainX, 300))
+TrainY = list(chunks(TrainY, 300))
 
 
 print ("pass")
@@ -73,8 +73,8 @@ print ("pass")
 Embedding = 100
 NUM_CLASSES = NumberOfClass
 CENTER_LOSS_ALPHA = 0.005
-Island_Loss_ALPHA = 1.0
-ratio = 0.00001
+Island_Loss_ALPHA = 0.005
+ratio = 0.5
 epochs = 3000
 
 with tf.name_scope('input'):
@@ -126,7 +126,11 @@ sess.run(tf.global_variables_initializer())
 
 step = sess.run(global_step)
 vali_acc = 0.0
+softmaxloss = 0.0
+totalloss = 0.0
+centerloss = 0.0
 while step <= epochs:
+
 
     for batchid, batchX in enumerate(TrainX):
         batchy = TrainY[batchid]
@@ -138,7 +142,6 @@ while step <= epochs:
                 input_images: batchX - mean_train_x,
                 labels: batchy,
             })
-        print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss , ', center_loss: ', centerloss)
 
 
     vali_acc = sess.run(
@@ -147,7 +150,7 @@ while step <= epochs:
             input_images: TestX - mean_test_x,
             labels: TestY
         })
-
+    print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss, ', center_loss: ', centerloss)
     print(("===== step: {}, train_acc:{:.4f}, vali_acc:{:.4f} ====".
           format(step, train_acc, vali_acc)))
 
