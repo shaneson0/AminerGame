@@ -48,7 +48,7 @@ export_path = join(settings.ISLAND_LOSS_DIR, "feature_model")
 
 saver = tf.train.Saver()
 with tf.Session() as sess:
-    path = '/kfdata01/kf_grp/chensx/AminerGame/Game1/utils/../data/IslandLoss/Model/feature_model_f1_None'
+    path = '/kfdata01/kf_grp/chensx/AminerGame/Game1/utils/../data/IslandLoss/vali_acc_0.6550534/feature_model'
     saver.save(sess, path)
     # saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_0.627907"))
     # saver.restore(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
