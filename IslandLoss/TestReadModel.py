@@ -33,7 +33,7 @@ layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer', ker
 layer2 = tf.keras.layers.Dropout(0.6)(layer2)
 
 
-feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[32])(layer2)
+feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[64])(layer2)
 logits = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(feature)
 
 
