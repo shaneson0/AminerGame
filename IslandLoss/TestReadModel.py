@@ -8,7 +8,13 @@ from keras import backend as K
 
 
 TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally, pids = prepareData()
+
+# TrainX, TrainY
+mean_train_x = np.mean(TrainX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
+
+
+print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
