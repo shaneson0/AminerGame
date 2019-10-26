@@ -72,9 +72,9 @@ print ("pass")
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
-CENTER_LOSS_ALPHA = 0.05
+CENTER_LOSS_ALPHA = 0.005
 Island_Loss_ALPHA = 1.0
-ratio = 0.0001
+ratio = 0.00001
 epochs = 3000
 
 with tf.name_scope('input'):
