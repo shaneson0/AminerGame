@@ -49,7 +49,7 @@ export_path = join(settings.ISLAND_LOSS_DIR, "feature_model")
 saver = tf.train.Saver()
 with tf.Session() as sess:
     f1 = 'None'
-    saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model__%s"%(f1)))
+    saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_f1_%s"%(f1)))
     # saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_0.627907"))
     # saver.restore(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
 
