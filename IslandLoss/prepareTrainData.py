@@ -46,9 +46,9 @@ def genPublicationLabel():
 def prepareData():
     LabelDict, numberofCluss = preprocessLabels()
     TrainPids = np.array(list(LabelDict.keys()))
-    TrainPids = np.array(TrainPids)
+    AllPids = np.array(TrainPids)
 
-    TrainPids, TestPids = train_test_split(TrainPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
+    TrainPids, TestPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
     # TrainPids, TestPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
 
 
@@ -84,7 +84,7 @@ def prepareData():
         TestY.append(label)
         Ally.append(label)
 
-    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss, AllX, Ally
+    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss, AllX, Ally, TrainPids + TestPids, TrainY + TestY
 
 
 def preprocessLabels():
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     print (len(set(TestY)))
 
 
-###
+
 
 
 
