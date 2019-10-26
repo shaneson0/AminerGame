@@ -84,7 +84,7 @@ def prepareData():
         TestY.append(label)
         Ally.append(label)
 
-    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss, AllX, Ally, TrainPids + TestPids, TrainY + TestY
+    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss, AllX, Ally, list(TrainPids) + list(TestPids)
 
 
 def preprocessLabels():
