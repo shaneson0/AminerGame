@@ -58,3 +58,4 @@ with tf.Session() as sess:
         labels: TestY
     })
     EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
+

@@ -74,7 +74,7 @@ Embedding = 100
 NUM_CLASSES = NumberOfClass
 CENTER_LOSS_ALPHA = 0.05
 Island_Loss_ALPHA = 1.0
-ratio = 0.00005
+ratio = 0.0001
 epochs = 3000
 
 with tf.name_scope('input'):
@@ -165,7 +165,9 @@ f1 = EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
 from os.path import join
 from utils import settings
 saver = tf.train.Saver()
-saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_f1_%s"%(f1)))
+path = join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_f1_%s"%(f1))
+saver.save(sess, path)
+print (path)
 
 
 print ("End..")
