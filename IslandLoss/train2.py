@@ -74,7 +74,7 @@ Embedding = 100
 NUM_CLASSES = NumberOfClass
 CENTER_LOSS_ALPHA = 0.005
 Island_Loss_ALPHA = 0.005
-ratio = 0.0001
+ratio = 0.00001
 epochs = 3000
 
 with tf.name_scope('input'):
@@ -86,11 +86,11 @@ global_step = tf.Variable(0, trainable=False, name='global_step')
 layer1 = tf.keras.layers.Dense(100, activation='relu', name='first_emb_layer',  kernel_regularizer=tf.keras.regularizers.l2(0.01))(input_images)
 layer1 = tf.keras.layers.Dropout(0.6)(layer1)
 
-layer2 = tf.keras.layers.Dense(100, activation='relu', name='last_emb_layer', kernel_regularizer=tf.keras.regularizers.l2(0.01))(layer1)
+layer2 = tf.keras.layers.Dense(64, activation='relu', name='last_emb_layer', kernel_regularizer=tf.keras.regularizers.l2(0.01))(layer1)
 layer2 = tf.keras.layers.Dropout(0.6)(layer2)
 
 
-feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[100])(layer2)
+feature = tf.keras.layers.Lambda(l2Norm, name='norm_layer', output_shape=[64])(layer2)
 logits = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(feature)
 
 with tf.name_scope('loss'):
