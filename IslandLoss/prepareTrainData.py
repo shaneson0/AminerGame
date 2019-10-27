@@ -150,7 +150,7 @@ def preprocessLabels():
     TestLabel = []
     ValidLabel = []
     for label in range(numberofCluss):
-        if CntList[label] > 300:
+        if CntList[label] > 200:
             ValidLabel.append(label)
 
     # 3724

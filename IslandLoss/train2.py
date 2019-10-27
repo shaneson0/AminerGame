@@ -58,11 +58,11 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally, pids = prepareData()
+TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally, pids, TestX, TestY = prepareData()
 
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
-mean_test_x = np.mean(TestX, axis=0)
+mean_test_x = np.mean(ValidX, axis=0)
 
 TrainX = list(chunks(TrainX, 2000))
 TrainY = list(chunks(TrainY, 2000))
@@ -147,8 +147,8 @@ while step <= epochs:
     vali_acc = sess.run(
         accuracy,
         feed_dict={
-            input_images: TestX - mean_test_x,
-            labels: TestY
+            input_images: ValidX - mean_test_x,
+            labels: ValidY
         })
     print ("softmaxloss: ", softmaxloss, ",totalloss: ", totalloss, ', center_loss: ', centerloss)
     print(("===== step: {}, train_acc:{:.4f}, vali_acc:{:.4f} ====".
@@ -157,10 +157,10 @@ while step <= epochs:
     step += 1
 
 Features = sess.run(feature,         feed_dict={
-            input_images: TestX - mean_test_x,
-            labels: TestY
+            input_images: ValidX - mean_test_x,
+            labels: ValidY
         })
-f1 = EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
+f1 = EmbedingCheck.check(Features, ValidY, name="train2_embedding.jpg")
 
 
 # save model
@@ -168,7 +168,7 @@ f1 = EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
 from os.path import join
 from utils import settings
 saver = tf.train.Saver()
-path = join(settings.ISLAND_LOSS_DIR, "vali_acc_%s"%(vali_acc), "feature_model")
+path = join(settings.ISLAND_LOSS_DIR, "200", "vali_acc_%s"%(vali_acc), "feature_model")
 saver.save(sess, path)
 print (path)
 
