@@ -14,9 +14,13 @@ def tSNEAnanlyse(emb, labels, trueLabels, savepath=False):
     X_new = TSNE(learning_rate=100).fit_transform(emb)
     plt.subplot(2, 1, 1)
     plt.scatter(X_new[:, 0], X_new[:, 1], c=labels, marker='o')
+    Points = list(zip(X_new[:, 0], X_new[:, 1]))
+    for idx, point in enumerate(Points):
+        x = point[0]
+        y = point[1]
+        label = labels[idx]
+        plt.text(x, y+0.3, str(label), ha='center', va='bottom', fontsize=3.5)
 
-    plt.subplot(2, 1, 2)
-    plt.scatter(X_new[:, 0], X_new[:, 1], c=trueLabels, marker='o')
 
     plt.show()
 
@@ -35,3 +39,4 @@ def check(embedding, embeddingLabels, name):
           'recall', '{:.5f}'.format(rec),
           'f1', '{:.5f}'.format(f1))
     tSNEAnanlyse(embedding, labels=embeddingLabels, trueLabels=embeddingLabels, savepath=join(settings.OUT_DIR, name))
+    return f1
