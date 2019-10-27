@@ -12,14 +12,14 @@ def tSNEAnanlyse(emb, labels, trueLabels, savepath=False):
     plt.figure()
     # labels = np.array(labels) + 2
     X_new = TSNE(learning_rate=100).fit_transform(emb)
-    plt.subplot(2, 1, 1)
+    plt.subplot(1, 1, 1)
     plt.scatter(X_new[:, 0], X_new[:, 1], c=labels, marker='o')
     Points = list(zip(X_new[:, 0], X_new[:, 1]))
     for idx, point in enumerate(Points):
         x = point[0]
         y = point[1]
         label = labels[idx]
-        plt.text(x, y+0.3, str(label), ha='center', va='bottom', fontsize=3.5)
+        plt.text(x, y+0.3, str(label), ha='center', va='bottom', fontsize=10.5)
 
 
     plt.show()
