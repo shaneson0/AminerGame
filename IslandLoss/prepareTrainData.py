@@ -51,7 +51,7 @@ def prepareData():
     AllPids = np.array(TrainPids)
 
     TrainPids, ValidPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
-    TestPids = np.array(list(TestLabelDict.values()))
+    TestPids = np.array(list(TestLabelDict.keys()))
 
     # TrainPids, ValidPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
 
