@@ -65,6 +65,7 @@ with tf.Session() as sess:
         input_images: TestX - mean_test_x,
         labels: TestY
     })
-    EmbedingCheck.check(TestFeatures, ValidY, name="Test_embedding.jpg")
+    EmbedingCheck.Testcheck(TestFeatures, TestY)
+    # EmbedingCheck.check(TestFeatures, TestY, name="Test_embedding.jpg")
 
 
