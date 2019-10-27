@@ -95,7 +95,7 @@ def prepareData():
 
     for pid in TestPids:
         emb = lc_emb.get(pid)
-        label = LabelDict[pid]
+        label = TestLabelDict[pid]
         # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
         if emb is None:
             continue
