@@ -7,10 +7,11 @@ from utils import EmbedingCheck
 from keras import backend as K
 
 
-TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally, pids = prepareData()
+TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally, pids, TestX, TestY = prepareData()
 
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
+mean_valid_x = np.mean(ValidX, axis=0)
 mean_test_x = np.mean(TestX, axis=0)
 
 
@@ -48,14 +49,22 @@ export_path = join(settings.ISLAND_LOSS_DIR, "feature_model")
 
 saver = tf.train.Saver()
 with tf.Session() as sess:
-    path = '/kfdata01/kf_grp/chensx/AminerGame/Game1/utils/../data/IslandLoss/vali_acc_0.6550534/feature_model'
+    # path = '/kfdata01/kf_grp/chensx/AminerGame/Game1/utils/../data/IslandLoss/vali_acc_0.6550534/feature_model'
+    path = './data/IslandLoss/model/vali_acc_0.6550534/feature_model'
     saver.restore(sess, path)
     # saver.save(sess, join(settings.ISLAND_LOSS_DIR, "Model", "feature_model_0.627907"))
     # saver.restore(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
 
     Features = sess.run(feature, feed_dict={
+        input_images: ValidX - mean_valid_x,
+        labels: ValidY
+    })
+    EmbedingCheck.check(Features, ValidY, name="train2_embedding.jpg")
+
+    TestFeatures = sess.run(feature, feed_dict={
         input_images: TestX - mean_test_x,
         labels: TestY
     })
-    EmbedingCheck.check(Features, TestY, name="train2_embedding.jpg")
+    EmbedingCheck.check(TestFeatures, ValidY, name="Test_embedding.jpg")
+
 

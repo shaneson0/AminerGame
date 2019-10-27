@@ -43,13 +43,17 @@ def genPublicationLabel():
                 Label[pid] = classes_dict[aid]
     return Label, numberofCluss
 
+
 def prepareData():
+    TestLabelDict, TestLabelNumberofCluss = preprocessTestLabels()
     LabelDict, numberofCluss = preprocessLabels()
     TrainPids = np.array(list(LabelDict.keys()))
     AllPids = np.array(TrainPids)
 
-    TrainPids, TestPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
-    # TrainPids, TestPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
+    TrainPids, ValidPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
+    TestPids = np.array(list(TestLabelDict.values()))
+
+    # TrainPids, ValidPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
 
 
     LMDB_NAME_EMB = "publication.emb.weighted"
@@ -59,8 +63,13 @@ def prepareData():
     Ally = []
     TrainX = []
     TrainY = []
+    ValidX = []
+    ValidY = []
+
+
     TestX = []
     TestY = []
+    
 
     for pid in TrainPids:
         emb = lc_emb.get(pid)
@@ -71,6 +80,17 @@ def prepareData():
         AllX.append(emb)
         TrainX.append(emb)
         TrainY.append(label)
+        Ally.append(label)
+
+    for pid in ValidPids:
+        emb = lc_emb.get(pid)
+        label = LabelDict[pid]
+        # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
+        if emb is None:
+            continue
+        AllX.append(emb)
+        ValidX.append(emb)
+        ValidY.append(label)
         Ally.append(label)
 
     for pid in TestPids:
@@ -84,8 +104,41 @@ def prepareData():
         TestY.append(label)
         Ally.append(label)
 
-    return np.array(TrainX), np.array(TrainY), np.array(TestX), np.array(TestY), numberofCluss, AllX, Ally, list(TrainPids) + list(TestPids)
+    return np.array(TrainX), np.array(TrainY), np.array(ValidX), np.array(ValidY), numberofCluss, AllX, Ally, list(TrainPids) + list(ValidPids), np.array(TestX), np.array(TestY)
 
+def preprocessTestLabels():
+    LabelDict, numberofCluss = genPublicationLabel()
+    CntList = np.zeros(numberofCluss)
+    for key in LabelDict:
+        CntList[LabelDict[key]] += 1
+
+
+    TestLabel = []
+    ValidLabel = []
+    for label in range(numberofCluss):
+        if CntList[label] < 300:
+            ValidLabel.append(label)
+
+    # 3724
+    # 258
+    TestLabelDict = {}
+    NewLabelDict = {}
+    for key in LabelDict:
+        label = LabelDict[key]
+        if label in ValidLabel:
+            NewLabelDict[key] = label
+
+        if label in TestLabel:
+            TestLabelDict[key] = label
+
+
+    classes_dict, numberofCluss = encode_labels2(list(NewLabelDict.values()))
+
+    for key in NewLabelDict:
+        oldLabel = NewLabelDict[key]
+        NewLabelDict[key] = classes_dict[oldLabel]
+
+    return NewLabelDict, numberofCluss
 
 def preprocessLabels():
     LabelDict, numberofCluss = genPublicationLabel()
@@ -93,17 +146,24 @@ def preprocessLabels():
     for key in LabelDict:
         CntList[LabelDict[key]] += 1
 
+
+    TestLabel = []
     ValidLabel = []
     for label in range(numberofCluss):
         if CntList[label] > 300:
             ValidLabel.append(label)
+
     # 3724
     # 258
+    TestLabelDict = {}
     NewLabelDict = {}
     for key in LabelDict:
         label = LabelDict[key]
         if label in ValidLabel:
             NewLabelDict[key] = label
+
+        if label in TestLabel:
+            TestLabelDict[key] = label
 
 
     classes_dict, numberofCluss = encode_labels2(list(NewLabelDict.values()))
@@ -125,12 +185,12 @@ def preprocessLabels():
 
 
 if __name__ == '__main__':
-    TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally = prepareData()
+    TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally = prepareData()
     print (NumberOfClass)
     print (TrainX)
     print (TrainY)
     print (len(set(TrainY)))
-    print (len(set(TestY)))
+    print (len(set(ValidY)))
 
 
 
