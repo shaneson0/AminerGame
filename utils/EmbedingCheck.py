@@ -28,6 +28,39 @@ def tSNEAnanlyse(emb, labels, trueLabels, savepath=False):
         plt.savefig(savepath)
     plt.close()
 
+from quick_cluster import FINCH
+from sklearn.metrics import silhouette_score
+def Testcheck(embedding, embeddingLabels, name):
+
+    Maxscore = -10000
+    NumberOfCluster = 0
+    emb_norm = normalize_vectors(embedding)
+
+    c, num_clust, req_c = FINCH(emb_norm)
+    print("num_clust: ", num_clust)
+    for nc in num_clust:
+        emb_norm = normalize_vectors(emb_norm)
+        TempLabels = clustering(emb_norm, nc)
+        score = silhouette_score(emb_norm, TempLabels)
+        print('nc: ', nc, ', score: ', score)
+        if score > Maxscore:
+            Maxscore = score
+            # tClusterLabels = TempLabels
+            NumberOfCluster = nc
+
+
+    clusters_pred = list(clustering(emb_norm, num_clusters=NumberOfCluster))
+
+    print ("clusters_pred: ", clusters_pred)
+    print ("embeddingLabels: ", embeddingLabels)
+    prec, rec, f1 = pairwise_precision_recall_f1(clusters_pred, embeddingLabels)
+    print('pairwise precision', '{:.5f}'.format(prec),
+          'recall', '{:.5f}'.format(rec),
+          'f1', '{:.5f}'.format(f1))
+    tSNEAnanlyse(embedding, labels=embeddingLabels, trueLabels=embeddingLabels, savepath=join(settings.OUT_DIR, name))
+
+
+
 def check(embedding, embeddingLabels, name):
     emb_norm = normalize_vectors(embedding)
     clusters_pred = list(clustering(emb_norm, num_clusters=len(list(set(embeddingLabels)))))
