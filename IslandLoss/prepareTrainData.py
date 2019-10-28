@@ -140,6 +140,7 @@ def preprocessTestLabels():
 
     return NewLabelDict, numberofCluss
 
+from collections import  defaultdict
 def preprocessLabels():
     LabelDict, numberofCluss = genPublicationLabel()
     CntList = np.zeros(numberofCluss)
@@ -150,17 +151,22 @@ def preprocessLabels():
     TestLabel = []
     ValidLabel = []
     for label in range(numberofCluss):
-        if CntList[label] > 200:
+        if CntList[label] > 20:
             ValidLabel.append(label)
 
     # 3724
     # 258
+    LabelCnt = defaultdict(0)
     TestLabelDict = {}
     NewLabelDict = {}
     for key in LabelDict:
         label = LabelDict[key]
+        if LabelCnt[label] > 19:
+            continue
+
         if label in ValidLabel:
             NewLabelDict[key] = label
+            LabelCnt[label] += 1
 
         if label in TestLabel:
             TestLabelDict[key] = label
