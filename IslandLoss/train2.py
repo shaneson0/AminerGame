@@ -74,7 +74,7 @@ Embedding = 100
 NUM_CLASSES = NumberOfClass
 CENTER_LOSS_ALPHA = 0.00002
 Island_Loss_ALPHA = 0.00002
-ratio = 0.5
+ratio = 0.1
 epochs = 3000
 
 with tf.name_scope('input'):
