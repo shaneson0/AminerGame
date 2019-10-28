@@ -156,7 +156,7 @@ def preprocessLabels():
 
     # 3724
     # 258
-    LabelCnt = defaultdict(0)
+    LabelCnt = defaultdict(int)
     TestLabelDict = {}
     NewLabelDict = {}
     for key in LabelDict:
