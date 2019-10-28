@@ -174,3 +174,5 @@ print (path)
 
 
 print ("End..")
+
+#softmaxloss:  4.063885 ,totalloss:  31.816998 , center_loss:  277.53113
