@@ -196,6 +196,8 @@ def preprocessTestLabels():
 def preprocessSNALabels():
     LabelDict, numberofCluss = genSNAData()
     CntList = np.zeros(numberofCluss)
+    print ("numberofCluss: ", numberofCluss)
+    print ("LabelDict values: ", len(list(set(LabelDict.values()))))
     for key in LabelDict:
         CntList[LabelDict[key]] += 1
 
