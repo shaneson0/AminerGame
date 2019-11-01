@@ -68,7 +68,10 @@ mean_test_x = np.mean(ValidX, axis=0)
 TrainX = list(chunks(TrainX, 2000))
 TrainY = list(chunks(TrainY, 2000))
 
+print ("===== TrainY ======")
 print (pd.Series(TrainY).value_counts())
+
+print ("===== ValidY ======")
 print (pd.Series(ValidY).value_counts())
 
 print ("pass")
