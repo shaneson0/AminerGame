@@ -68,10 +68,14 @@ def genPublicationLabel():
 
 
 def prepareData():
-    SNALabelDict = preprocessSNALabels()
+    SNALabelDict, numberofCluss = preprocessSNALabels()
     TestLabelDict, TestLabelNumberofCluss = preprocessTestLabels()
     LabelDict, numberofCluss = preprocessLabels()
+
+    print (SNALabelDict)
+
     TrainPids = np.array(list(LabelDict.keys()))
+    SNAPids = np.array(list(SNALabelDict.keys()))
     AllPids = np.array(TrainPids)
 
     TrainPids, ValidPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
@@ -105,7 +109,7 @@ def prepareData():
         Ally.append(label)
 
     # put Sna dataset into train
-    for pid in SNALabelDict.keys():
+    for pid in SNAPids:
         emb = lc_emb.get(pid)
         label = SNALabelDict[pid]
         if emb is None:
