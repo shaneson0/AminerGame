@@ -229,9 +229,17 @@ def preprocessLabels():
 
     TestLabel = []
     ValidLabel = []
-    for label in range(numberofCluss):
-        if CntList[label] > 300:
-            ValidLabel.append(label)
+    for key in LabelDict:
+        if CntList[LabelDict[key]] > 300:
+            ValidLabel.append(LabelDict[key])
+
+    ValidLabel = list(set(ValidLabel))
+
+        # CntList[LabelDict[key]] += 1
+    #
+    # for label in range(numberofCluss):
+    #     if CntList[label] > 300:
+    #         ValidLabel.append(label)
 
     # 3724
     # 258
@@ -240,7 +248,7 @@ def preprocessLabels():
     NewLabelDict = {}
     for key in LabelDict:
         label = LabelDict[key]
-        if LabelCnt[label] > 19:
+        if LabelCnt[label] > 29:
             continue
 
         if label in ValidLabel:
