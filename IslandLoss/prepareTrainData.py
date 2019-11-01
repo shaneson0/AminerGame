@@ -68,6 +68,18 @@ def genSNAData():
 
     return Newlabel, len(list(set(Newlabel.values())))
 
+def genSNALabel():
+    Label = {}
+    with open(join(settings.SNA_PUB_DIR, "sna_valid_author_raw.json"), "r") as fp:
+        sna_valid_pub = json.load(fp)
+        fp.close()
+    classes_dict, numberofCluss = encode_labels([], sna_valid_pub)
+
+    for aid in sna_valid_pub.keys():
+        for pid in sna_valid_pub[aid]:
+            Label[pid] = classes_dict[aid]
+
+    return Label, numberofCluss
 
 def genPublicationLabel():
     Label = {}
@@ -100,7 +112,7 @@ def prepareData(type='train'):
     if type == 'train':
         LabelDict, numberofCluss = preprocessLabels()
     else:
-        LabelDict, numberofCluss = preprocessAllLabels()
+        LabelDict, numberofCluss = preprocessSNALabels()
 
     print ("LabelDict : ", LabelDict)
 
@@ -270,8 +282,8 @@ def preprocessLabels():
 
     return NewLabelDict, numberofCluss
 
-def preprocessAllLabels():
-    LabelDict, numberofCluss = genPublicationLabel()
+def preprocessSNALabels():
+    LabelDict, numberofCluss = genSNALabel()
     classes_dict, numberofCluss = encode_labels2(list(LabelDict.values()))
 
     for key in LabelDict:
