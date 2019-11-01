@@ -109,7 +109,7 @@ def prepareData(type='train'):
     AllPids = np.array(TrainPids)
     print ("AllPids : ", list(AllPids))
 
-    TrainPids, ValidPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
+    TrainPids, ValidPids = train_test_split(AllPids, stratify=list(LabelDict.values()), random_state=42)
 
     # TrainPids, ValidPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
 
