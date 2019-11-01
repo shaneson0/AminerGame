@@ -49,7 +49,7 @@ with tf.Session() as sess:
     vali_acc = "0.66071427"
     path = join(settings.ISLAND_LOSS_DIR, "200", "vali_acc_%s"%(vali_acc), "feature_model")
 
-    saver.save(sess, path)
+    saver.restore(sess, path)
     # saver.restore(sess, join(settings.ISLAND_LOSS_DIR, "feature_model"))
 
     Features = sess.run(feature, feed_dict={
