@@ -57,6 +57,8 @@ with tf.Session() as sess:
         labels: Ally
     })
 
+    EmbedingCheck.check(Features, Ally, name="train2_embedding.jpg")
+
     for idx, pid in enumerate(pids):
         emb = Features[idx]
         lc.set(pid, emb)

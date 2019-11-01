@@ -116,6 +116,7 @@ def prepareData():
     TrainY = []
     ValidX = []
     ValidY = []
+    Allpids = []
 
 
     for pid in TrainPids:
@@ -124,6 +125,7 @@ def prepareData():
         # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
         if emb is None:
             continue
+        Allpids.append(pid)
         AllX.append(emb)
         TrainX.append(emb)
         TrainY.append(label)
@@ -136,13 +138,14 @@ def prepareData():
         # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
         if emb is None:
             continue
+        Allpids.append(pid)
         AllX.append(emb)
         ValidX.append(emb)
         ValidY.append(label)
         Ally.append(label)
 
 
-    return np.array(TrainX), np.array(TrainY), np.array(ValidX), np.array(ValidY), numberofCluss, AllX, Ally, list(TrainPids) + list(ValidPids)
+    return np.array(TrainX), np.array(TrainY), np.array(ValidX), np.array(ValidY), numberofCluss, AllX, Ally, Allpids
 
 def preprocessTestLabels():
     LabelDict, numberofCluss = genPublicationLabel()
