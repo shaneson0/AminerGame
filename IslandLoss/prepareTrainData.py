@@ -94,10 +94,13 @@ def genPublicationLabel():
 
 
 
-def prepareData():
+def prepareData(type='train'):
     # SNALabelDict, numberofCluss = preprocessSNALabels()
     # TestLabelDict, TestLabelNumberofCluss = preprocessTestLabels()
-    LabelDict, numberofCluss = preprocessLabels()
+    if type == 'train':
+        LabelDict, numberofCluss = preprocessLabels()
+    else:
+        LabelDict, numberofCluss = preprocessAllLabels()
 
 
     TrainPids = np.array(list(LabelDict.keys()))
@@ -253,13 +256,15 @@ def preprocessLabels():
 
     return NewLabelDict, numberofCluss
 
+def preprocessAllLabels():
+    LabelDict, numberofCluss = genPublicationLabel()
+    classes_dict, numberofCluss = encode_labels2(list(LabelDict.values()))
 
-    # CntList = np.array(CntList)
-    # CntList = CntList[CntList > 10]
-    #
-    # print (list(CntList))
-    # print (len(list(CntList)))
-    # print (len(list(set(CntList))))
+    for key in LabelDict:
+        oldLabel = LabelDict[key]
+        LabelDict[key] = classes_dict[oldLabel]
+
+    return LabelDict, numberofCluss
 
 
 

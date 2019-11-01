@@ -12,7 +12,7 @@ from keras import backend as K
 LMDB_NAME = "author_IslandLoss.emb.weighted"
 lc = LMDBClient(LMDB_NAME)
 
-TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally, pids = prepareData()
+TrainX, TrainY, TestX, TestY, NumberOfClass, AllX, Ally, pids = prepareData('all')
 MeanAllX = np.mean(AllX, axis=0)
 
 Embedding = 100
