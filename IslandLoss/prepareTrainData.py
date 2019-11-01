@@ -102,6 +102,8 @@ def prepareData(type='train'):
     else:
         LabelDict, numberofCluss = preprocessAllLabels()
 
+    print ("LabelDict : ", LabelDict)
+
 
     TrainPids = np.array(list(LabelDict.keys()))
     AllPids = np.array(TrainPids)
