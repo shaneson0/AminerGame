@@ -33,8 +33,8 @@ def dump_author_features_to_file():
         n_authors = len(paper.get('authors', []))
         for j in range(n_authors):
             author_feature = feature_utils.extract_author_features(paper, j)
-            # aid = '{}-{}'.format(pid, j)
-            aid = '{}'.format(pid)
+            aid = '{}-{}'.format(pid, j)
+            # aid = '{}'.format(pid)
             wf.write(aid + '\t' + ' '.join(author_feature) + '\n')
             break
     wf.close()
@@ -122,12 +122,12 @@ if __name__ == '__main__':
     some pre-processing
     """
     dump_author_features_to_file()
-    dump_author_features_to_cache()
-    # test()
-    emb_model = EmbeddingModel.Instance()
-    emb_model.train('shanxuan')  # training word embedding model
-    cal_feature_idf()
-    dump_author_embs()
+    # dump_author_features_to_cache()
+    # # test()
+    # emb_model = EmbeddingModel.Instance()
+    # emb_model.train('shanxuan')  # training word embedding model
+    # cal_feature_idf()
+    # dump_author_embs()
     # print('done', datetime.now()-start_time)
 
 
