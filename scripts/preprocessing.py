@@ -122,12 +122,12 @@ if __name__ == '__main__':
     some pre-processing
     """
     dump_author_features_to_file()
-    # dump_author_features_to_cache()
+    dump_author_features_to_cache()
     # # test()
     # emb_model = EmbeddingModel.Instance()
     # emb_model.train('shanxuan')  # training word embedding model
-    # cal_feature_idf()
-    # dump_author_embs()
+    cal_feature_idf()
+    dump_author_embs()
     # print('done', datetime.now()-start_time)
 
 

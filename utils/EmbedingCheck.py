@@ -73,3 +73,7 @@ def check(embedding, embeddingLabels, name):
           'f1', '{:.5f}'.format(f1))
     tSNEAnanlyse(embedding, labels=embeddingLabels, trueLabels=embeddingLabels, savepath=join(settings.OUT_DIR, name))
     return f1
+
+
+
+
