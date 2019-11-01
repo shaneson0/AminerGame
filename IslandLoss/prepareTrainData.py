@@ -248,7 +248,7 @@ def preprocessLabels():
     NewLabelDict = {}
     for key in LabelDict:
         label = LabelDict[key]
-        if LabelCnt[label] > 29:
+        if LabelCnt[label] > 59:
             continue
 
         if label in ValidLabel:
