@@ -59,6 +59,7 @@ def genSNAData():
     for pid in Label:
         if CntLabel[Label[pid]] > 100:
             continue
+        CntLabel[Label[pid]] += 1
         Newlabel[pid] = Label[pid]
 
     return Newlabel, len(list(set(Newlabel.values())))
