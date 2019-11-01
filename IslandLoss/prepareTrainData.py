@@ -107,7 +107,7 @@ def prepareData(type='train'):
 
     TrainPids = np.array(list(LabelDict.keys()))
     AllPids = np.array(TrainPids)
-    print ("AllPids : ", AllPids)
+    print ("AllPids : ", list(AllPids))
 
     TrainPids, ValidPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
 
