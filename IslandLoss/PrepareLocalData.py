@@ -46,7 +46,7 @@ export_path = join(settings.ISLAND_LOSS_DIR, "feature_model")
 
 saver = tf.train.Saver()
 with tf.Session() as sess:
-    vali_acc = "0.66071427"
+    vali_acc = "0.47049925"
     path = join(settings.ISLAND_LOSS_DIR, "200", "vali_acc_%s"%(vali_acc), "feature_model")
 
     saver.restore(sess, path)
