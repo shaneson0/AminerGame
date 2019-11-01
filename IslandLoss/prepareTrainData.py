@@ -52,15 +52,15 @@ def genSNAData():
 
     Newlabel = {}
     CntList = np.zeros(numberofCluss)
-    CntLabel = np.zeros(len(list(set(Label.values()))))
+    CntLabel = np.zeros(numberofCluss)
     for key in Label:
         CntList[Label[key]] += 1
 
-    for pid in Label:
-        if CntLabel[Label[pid]] > 100 or CntList[Label[pid]] < 100:
+    for key in Label:
+        if CntLabel[Label[key]] > 100 or CntList[Label[key]] < 100:
             continue
-        CntLabel[Label[pid]] += 1
-        Newlabel[pid] = Label[pid]
+        CntLabel[Label[key]] += 1
+        Newlabel[key] = Label[key]
 
     return Newlabel, len(list(set(Newlabel.values())))
 
