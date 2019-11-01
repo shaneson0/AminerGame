@@ -91,7 +91,7 @@ def genPublicationLabel():
     #     sna_valid_pub = json.load(fp)
     #     fp.close()
 
-    classes_dict, numberofCluss = encode_labels(train_author, sna_valid_pub)
+    classes_dict, numberofCluss = encode_labels(train_author, {})
 
     for name in train_author.keys():
         for aid in train_author[name].keys():
