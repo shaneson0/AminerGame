@@ -29,7 +29,8 @@ from utils import data_utils
 # DgeXbWSs
 
 pubs_dict = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'pubs_raw.json')
-print ("THiFkqbz")
+
+print (pubs_dict["THiFkqbz"])
 
 # LMDB_AUTHOR_FEATURE = "pub_authors.feature"
 # lc_feature = LMDBClient(LMDB_AUTHOR_FEATURE)
