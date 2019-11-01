@@ -246,6 +246,8 @@ def gen_sna_data(idf_threshold=10):
                 print(i)
             author_feature1 = set(lc_feature.get(pids_filter[i]))
             for j in range(i+1, n_pubs):
+                print("pids_filter[j]: ", pids_filter[j])
+                print ("lc_feature.get(pids_filter[j]): ", lc_feature.get(pids_filter[j]))
                 author_feature2 = set(lc_feature.get(pids_filter[j]))
                 common_features = author_feature1.intersection(author_feature2)
                 idf_sum = 0
