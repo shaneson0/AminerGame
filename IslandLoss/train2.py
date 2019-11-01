@@ -61,13 +61,6 @@ def chunks(l, n):
 
 TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally, pids = prepareData()
 
-# TrainX, TrainY
-mean_train_x = np.mean(TrainX, axis=0)
-mean_test_x = np.mean(ValidX, axis=0)
-
-TrainX = list(chunks(TrainX, 2000))
-TrainY = list(chunks(TrainY, 2000))
-
 print ("===== TrainY ======")
 print (pd.Series(TrainY).value_counts())
 
@@ -75,6 +68,15 @@ print ("===== ValidY ======")
 print (pd.Series(ValidY).value_counts())
 
 print ("pass")
+
+# TrainX, TrainY
+mean_train_x = np.mean(TrainX, axis=0)
+mean_test_x = np.mean(ValidX, axis=0)
+
+TrainX = list(chunks(TrainX, 2000))
+TrainY = list(chunks(TrainY, 2000))
+
+
 
 Embedding = 100
 NUM_CLASSES = NumberOfClass
