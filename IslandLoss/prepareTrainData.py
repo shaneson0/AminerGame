@@ -49,7 +49,19 @@ def genSNAData():
     for aid in SNAAuthor.keys():
         for pid in SNAAuthor[aid]:
             Label[pid] = classes_dict[aid]
-    return Label, numberofCluss
+
+    Newlabel = {}
+    CntList = np.zeros(numberofCluss)
+    CntLabel = np.zeros(numberofCluss)
+    for key in Label:
+        CntList[Label[key]] += 1
+
+    for pid in Label:
+        if CntLabel[Label[pid]] > 100:
+            continue
+        Newlabel[pid] = Label[pid]
+
+    return Newlabel, len(list(set(Newlabel.values())))
 
 
 def genPublicationLabel():
