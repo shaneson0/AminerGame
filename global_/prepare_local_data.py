@@ -245,7 +245,11 @@ def gen_sna_data(idf_threshold=10):
             if i % 10 == 0:
                 print(i)
             else:
-                author_feature1 = set(lc_feature.get(pids_filter[i]))
+                author_feature1 = lc_feature.get(pids_filter[i])
+                if author_feature1 is None:
+                    continue
+                else:
+                    author_feature1 = set(author_feature1)
                 for j in range(i+1, n_pubs):
                     # print("pids_filter[j]: ", pids_filter[j])
                     # print ("lc_feature.get(pids_filter[j]): ", lc_feature.get(pids_filter[j]))
