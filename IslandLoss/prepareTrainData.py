@@ -87,9 +87,9 @@ def genPublicationLabel():
         train_author = json.load(fp)
         fp.close()
 
-    with open(join(settings.SNA_PUB_DIR, "sna_valid_author_raw.json"), "r") as fp:
-        sna_valid_pub = json.load(fp)
-        fp.close()
+    # with open(join(settings.SNA_PUB_DIR, "sna_valid_author_raw.json"), "r") as fp:
+    #     sna_valid_pub = json.load(fp)
+    #     fp.close()
 
     classes_dict, numberofCluss = encode_labels(train_author, sna_valid_pub)
 
@@ -97,10 +97,10 @@ def genPublicationLabel():
         for aid in train_author[name].keys():
             for pid in train_author[name][aid]:
                 Label[pid] = classes_dict[aid]
-
-    for aid in sna_valid_pub.keys():
-        for pid in sna_valid_pub[aid]:
-            Label[pid] = classes_dict[aid]
+    #
+    # for aid in sna_valid_pub.keys():
+    #     for pid in sna_valid_pub[aid]:
+    #         Label[pid] = classes_dict[aid]
 
     return Label, numberofCluss
 
@@ -245,7 +245,7 @@ def preprocessLabels():
     TestLabel = []
     ValidLabel = []
     for key in LabelDict:
-        if CntList[LabelDict[key]] > 300:
+        if CntList[LabelDict[key]] > 200:
             ValidLabel.append(LabelDict[key])
 
     ValidLabel = list(set(ValidLabel))
