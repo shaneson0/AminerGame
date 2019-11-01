@@ -12,6 +12,15 @@ import math
 import numpy as np
 import json
 
+def encode_sna_labels(sna_author):
+    labels = []
+    for aid in sna_author.keys():
+        labels.append(aid)
+    classes = set(labels)
+    numberofCluss = len(list(set(labels)))
+    classes_dict = {c: i for i, c in enumerate(classes)}
+    return classes_dict, numberofCluss
+
 def encode_labels(train_author):
     labels = []
     for name in train_author.keys():
@@ -30,6 +39,19 @@ def encode_labels2(labels):
     classes_dict = {c: i for i, c in enumerate(classes)}
     return classes_dict, numberofCluss
 
+def genSNAData():
+    Label = {}
+    with open(join(settings.SNA_PUB_DIR, "sna_valid_author_raw.json"), "r") as fp:
+        SNAAuthor = json.load(fp)
+        fp.close()
+    classes_dict, numberofCluss = encode_sna_labels(SNAAuthor)
+
+    for aid in SNAAuthor.keys():
+        for pid in SNAAuthor[aid]:
+            Label[pid] = classes_dict[aid]
+    return Label, numberofCluss
+
+
 def genPublicationLabel():
     Label = {}
     with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
@@ -44,7 +66,9 @@ def genPublicationLabel():
     return Label, numberofCluss
 
 
+
 def prepareData():
+    SNALabelDict = preprocessSNALabels()
     TestLabelDict, TestLabelNumberofCluss = preprocessTestLabels()
     LabelDict, numberofCluss = preprocessLabels()
     TrainPids = np.array(list(LabelDict.keys()))
@@ -55,7 +79,6 @@ def prepareData():
 
     # TrainPids, ValidPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
 
-
     LMDB_NAME_EMB = "publication.emb.weighted"
     lc_emb = LMDBClient(LMDB_NAME_EMB)
 
@@ -65,7 +88,6 @@ def prepareData():
     TrainY = []
     ValidX = []
     ValidY = []
-
 
     TestX = []
     TestY = []
@@ -81,6 +103,19 @@ def prepareData():
         TrainX.append(emb)
         TrainY.append(label)
         Ally.append(label)
+
+    # put Sna dataset into train
+    for pid in SNALabelDict.keys():
+        emb = lc_emb.get(pid)
+        label = SNALabelDict[pid]
+        if emb is None:
+            print (" SNALabelDict pid: %s is null"%(pid) )
+            continue
+        TrainX.append(emb)
+        TrainY.append(label)
+        AllX.append(emb)
+        Ally.append(label)
+
 
     for pid in ValidPids:
         emb = lc_emb.get(pid)
@@ -140,6 +175,36 @@ def preprocessTestLabels():
 
     return NewLabelDict, numberofCluss
 
+
+def preprocessSNALabels():
+    LabelDict, numberofCluss = genSNAData()
+    CntList = np.zeros(numberofCluss)
+    for key in LabelDict:
+        CntList[LabelDict[key]] += 1
+
+    TestLabel = []
+    ValidLabel = []
+    for label in range(numberofCluss):
+        if CntList[label] > 100:
+            ValidLabel.append(label)
+
+    # 3724
+    # 258
+    SNALabelDict = {}
+    for key in LabelDict:
+        label = LabelDict[key]
+        if label in ValidLabel:
+            SNALabelDict[key] = label
+
+
+    classes_dict, numberofCluss = encode_labels2(list(SNALabelDict.values()))
+
+    for key in SNALabelDict:
+        oldLabel = SNALabelDict[key]
+        SNALabelDict[key] = classes_dict[oldLabel]
+
+    return SNALabelDict, numberofCluss
+
 from collections import  defaultdict
 def preprocessLabels():
     LabelDict, numberofCluss = genPublicationLabel()
@@ -191,12 +256,13 @@ def preprocessLabels():
 
 
 if __name__ == '__main__':
-    TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally = prepareData()
-    print (NumberOfClass)
-    print (TrainX)
-    print (TrainY)
-    print (len(set(TrainY)))
-    print (len(set(ValidY)))
+    genSNAData()
+    # TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally = prepareData()
+    # print (NumberOfClass)
+    # print (TrainX)
+    # print (TrainY)
+    # print (len(set(TrainY)))
+    # print (len(set(ValidY)))
 
 
 
