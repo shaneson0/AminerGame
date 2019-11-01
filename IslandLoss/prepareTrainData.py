@@ -73,7 +73,7 @@ def genSNALabel():
     with open(join(settings.SNA_PUB_DIR, "sna_valid_author_raw.json"), "r") as fp:
         sna_valid_pub = json.load(fp)
         fp.close()
-    classes_dict, numberofCluss = encode_labels([], sna_valid_pub)
+    classes_dict, numberofCluss = encode_labels({}, sna_valid_pub)
 
     for aid in sna_valid_pub.keys():
         for pid in sna_valid_pub[aid]:
