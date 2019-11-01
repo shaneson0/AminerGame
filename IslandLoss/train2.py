@@ -58,7 +58,7 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
-TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally, pids, TestX, TestY = prepareData()
+TrainX, TrainY, ValidX, ValidY, NumberOfClass, AllX, Ally, pids = prepareData()
 
 # TrainX, TrainY
 mean_train_x = np.mean(TrainX, axis=0)
