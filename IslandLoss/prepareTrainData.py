@@ -75,7 +75,7 @@ def genPublicationLabel():
         train_author = json.load(fp)
         fp.close()
 
-    with open(join(settings.SNA_PUB_DIR, "sna_valid_pub.json"), "r") as fp:
+    with open(join(settings.SNA_PUB_DIR, "sna_valid_author_raw.json"), "r") as fp:
         sna_valid_pub = json.load(fp)
         fp.close()
 
