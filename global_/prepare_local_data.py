@@ -244,19 +244,25 @@ def gen_sna_data(idf_threshold=10):
         for i in range(n_pubs-1):
             if i % 10 == 0:
                 print(i)
-            author_feature1 = set(lc_feature.get(pids_filter[i]))
-            for j in range(i+1, n_pubs):
-                # print("pids_filter[j]: ", pids_filter[j])
-                # print ("lc_feature.get(pids_filter[j]): ", lc_feature.get(pids_filter[j]))
-                author_feature2 = set(lc_feature.get(pids_filter[j]))
-                common_features = author_feature1.intersection(author_feature2)
-                idf_sum = 0
-                for f in common_features:
-                    idf_sum += idf.get(f, idf_threshold)
-                    # print(f, idf.get(f, idf_threshold))
-                if idf_sum >= idf_threshold:
-                    wf_network.write('{}\t{}\n'.format(pids_filter[i], pids_filter[j]))
+            else:
+                author_feature1 = set(lc_feature.get(pids_filter[i]))
+                for j in range(i+1, n_pubs):
+                    # print("pids_filter[j]: ", pids_filter[j])
+                    # print ("lc_feature.get(pids_filter[j]): ", lc_feature.get(pids_filter[j]))
+                    author_feature2 = lc_feature.get(pids_filter[j])
+                    if author_feature2 is None:
+                        continue
+                    author_feature2 = set(author_feature2)
+                    common_features = author_feature1.intersection(author_feature2)
+                    idf_sum = 0
+                    for f in common_features:
+                        idf_sum += idf.get(f, idf_threshold)
+                        # print(f, idf.get(f, idf_threshold))
+                    if idf_sum >= idf_threshold:
+                        wf_network.write('{}\t{}\n'.format(pids_filter[i], pids_filter[j]))
         wf_network.close()
+
+
 
 if __name__ == '__main__':
     # dump_inter_emb()
