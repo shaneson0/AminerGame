@@ -21,11 +21,14 @@ def encode_sna_labels(sna_author):
     classes_dict = {c: i for i, c in enumerate(classes)}
     return classes_dict, numberofCluss
 
-def encode_labels(train_author):
+def encode_labels(train_author, sna_valid_pub):
     labels = []
     for name in train_author.keys():
         for aid in train_author[name].keys():
             labels.append(aid)
+
+    for aid in sna_valid_pub.keys():
+        labels.append(aid)
 
     # print ("classes number: ", len(list(set(labels))))
     classes = set(labels)
@@ -62,6 +65,7 @@ def genSNAData():
         CntLabel[Label[key]] += 1
         Newlabel[key] = Label[key]
 
+
     return Newlabel, len(list(set(Newlabel.values())))
 
 
@@ -70,29 +74,36 @@ def genPublicationLabel():
     with open(join(settings.TRAIN_PUB_DIR, "train_author.json"), "r") as fp:
         train_author = json.load(fp)
         fp.close()
-    classes_dict, numberofCluss = encode_labels(train_author)
+
+    with open(join(settings.SNA_PUB_DIR, "sna_valid_pub.json"), "r") as fp:
+        sna_valid_pub = json.load(fp)
+        fp.close()
+
+    classes_dict, numberofCluss = encode_labels(train_author, sna_valid_pub)
 
     for name in train_author.keys():
         for aid in train_author[name].keys():
             for pid in train_author[name][aid]:
                 Label[pid] = classes_dict[aid]
+
+    for aid in sna_valid_pub.keys():
+        for pid in sna_valid_pub[aid]:
+            Label[pid] = classes_dict[aid]
+
     return Label, numberofCluss
 
 
 
 def prepareData():
-    SNALabelDict, numberofCluss = preprocessSNALabels()
-    TestLabelDict, TestLabelNumberofCluss = preprocessTestLabels()
+    # SNALabelDict, numberofCluss = preprocessSNALabels()
+    # TestLabelDict, TestLabelNumberofCluss = preprocessTestLabels()
     LabelDict, numberofCluss = preprocessLabels()
 
-    print (SNALabelDict)
 
     TrainPids = np.array(list(LabelDict.keys()))
-    SNAPids = np.array(list(SNALabelDict.keys()))
     AllPids = np.array(TrainPids)
 
     TrainPids, ValidPids = train_test_split(AllPids, stratify=list(LabelDict.values()), test_size=0.1, random_state=42)
-    TestPids = np.array(list(TestLabelDict.keys()))
 
     # TrainPids, ValidPids = train_test_split(TrainPids, test_size=0.1, random_state=42)
 
@@ -106,9 +117,6 @@ def prepareData():
     ValidX = []
     ValidY = []
 
-    TestX = []
-    TestY = []
-    
 
     for pid in TrainPids:
         emb = lc_emb.get(pid)
@@ -119,18 +127,6 @@ def prepareData():
         AllX.append(emb)
         TrainX.append(emb)
         TrainY.append(label)
-        Ally.append(label)
-
-    # put Sna dataset into train
-    for pid in SNAPids:
-        emb = lc_emb.get(pid)
-        label = SNALabelDict[pid]
-        if emb is None:
-            print (" SNALabelDict pid: %s is null"%(pid) )
-            continue
-        TrainX.append(emb)
-        TrainY.append(label)
-        AllX.append(emb)
         Ally.append(label)
 
 
@@ -145,18 +141,8 @@ def prepareData():
         ValidY.append(label)
         Ally.append(label)
 
-    for pid in TestPids:
-        emb = lc_emb.get(pid)
-        label = TestLabelDict[pid]
-        # print ("pid: ", pid, ", label: ", label, ', emb: ', emb)
-        if emb is None:
-            continue
-        AllX.append(emb)
-        TestX.append(emb)
-        TestY.append(label)
-        Ally.append(label)
 
-    return np.array(TrainX), np.array(TrainY), np.array(ValidX), np.array(ValidY), numberofCluss, AllX, Ally, list(TrainPids) + list(ValidPids), np.array(TestX), np.array(TestY)
+    return np.array(TrainX), np.array(TrainY), np.array(ValidX), np.array(ValidY), numberofCluss, AllX, Ally, list(TrainPids) + list(ValidPids)
 
 def preprocessTestLabels():
     LabelDict, numberofCluss = genPublicationLabel()
