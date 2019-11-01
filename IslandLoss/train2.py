@@ -6,6 +6,7 @@ from keras import backend as K
 from IslandLoss.prepareTrainData import prepareData
 from utils import EmbedingCheck
 from IslandLoss import get_lc_center_loss
+import pandas as pd
 
 def get_center_loss(features, labels, alpha, num_classes):
     """获取center loss及center的更新op
@@ -67,8 +68,8 @@ mean_test_x = np.mean(ValidX, axis=0)
 TrainX = list(chunks(TrainX, 2000))
 TrainY = list(chunks(TrainY, 2000))
 
-print (TrainY.value_counts())
-print (ValidY.value_counts())
+print (pd.Series(TrainY).value_counts())
+print (pd.Series(ValidY).value_counts())
 
 print ("pass")
 
