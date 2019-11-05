@@ -199,8 +199,8 @@ def gen_sna_data(idf_threshold=10):
     name_to_pubs_test = data_utils.load_json(settings.SNA_PUB_DIR, 'sna_valid_author_raw.json')
 
     idf = data_utils.load_data(settings.GLOBAL_DATA_DIR, 'feature_idf.pkl')
-    # INTER_LMDB_NAME = 'author_triplets.emb'
-    INTER_LMDB_NAME = 'author_IslandLoss.emb.weighted'
+    INTER_LMDB_NAME = 'author_triplets.emb'
+    # INTER_LMDB_NAME = 'author_IslandLoss.emb.weighted'
     lc_inter = LMDBClient(INTER_LMDB_NAME)
     LMDB_AUTHOR_FEATURE = "pub_authors.feature"
     lc_feature = LMDBClient(LMDB_AUTHOR_FEATURE)
@@ -273,5 +273,5 @@ if __name__ == '__main__':
     dump_emb()
     dump_test_emb()
     gen_local_data(idf_threshold=IDF_THRESHOLD)
-    gen_sna_data(idf_threshold=IDF_THRESHOLD)
+    # gen_sna_data(idf_threshold=IDF_THRESHOLD)
     print('done')
