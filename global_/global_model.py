@@ -144,7 +144,8 @@ class GlobalTripletModel:
 
 
 if __name__ == '__main__':
-    global_model = GlobalTripletModel(data_scale=1000000)
+    # 10000000
+    global_model = GlobalTripletModel(data_scale=10000000)
     global_model.train_triplets_model()
     print('done')
     

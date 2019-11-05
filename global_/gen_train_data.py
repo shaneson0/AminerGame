@@ -90,7 +90,7 @@ class TripletsGenerator:
                     pid1 = pids[i]  # pid
 
                     # batch samples
-                    n_samples_anchor = min(6, cur_n_pubs)
+                    n_samples_anchor = min(60, cur_n_pubs)
                     idx_pos = random.sample(range(cur_n_pubs), n_samples_anchor)
                     for ii, i_pos in enumerate(idx_pos):
                         if i_pos != i:
@@ -181,6 +181,6 @@ class TripletsGenerator:
 
 
 if __name__ == '__main__':
-    data_gen = TripletsGenerator(train_scale=1000000)
+    data_gen = TripletsGenerator(train_scale=10000000)
     data_gen.dump_triplets(role='train')
     data_gen.dump_triplets(role='test')

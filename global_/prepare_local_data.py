@@ -20,7 +20,7 @@ def dump_emb():
     lc_input = LMDBClient(LMDB_NAME)
     INTER_LMDB_NAME = 'author_triplets.emb'
     lc_inter = LMDBClient(INTER_LMDB_NAME)
-    global_model = GlobalTripletModel(data_scale=1000000)
+    global_model = GlobalTripletModel(data_scale=10000000)
     trained_global_model = global_model.load_triplets_model()
     name_to_pubs_train = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_train.json')
     for name in name_to_pubs_train:
@@ -270,8 +270,8 @@ def gen_sna_data(idf_threshold=10):
 
 if __name__ == '__main__':
     # dump_inter_emb()
-    # dump_emb()
-    # dump_test_emb()
-    # gen_local_data(idf_threshold=IDF_THRESHOLD)
+    dump_emb()
+    dump_test_emb()
+    gen_local_data(idf_threshold=IDF_THRESHOLD)
     gen_sna_data(idf_threshold=IDF_THRESHOLD)
     print('done')
