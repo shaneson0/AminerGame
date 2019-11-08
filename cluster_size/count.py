@@ -114,7 +114,7 @@ def gen_test(k=300, flatten=False):
                 x.append(data_cache[p])
             else:
                 x.append(lc.get(p))
-        print ("x: ", x)
+        print ("name: ", name,  "x: ", x)
         if flatten:
             xs.append(np.sum(x, axis=0))
         else:
