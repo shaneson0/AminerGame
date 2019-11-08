@@ -95,7 +95,9 @@ def gen_test(k=300, flatten=False):
     name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_test.json')
     xs, ys = [], []
     names = []
+    print (name_to_pubs_test)
     for name in name_to_pubs_test:
+        print ("name: ", name)
         names.append(name)
         num_clusters = len(name_to_pubs_test[name])
         x = []
