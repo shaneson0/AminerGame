@@ -102,7 +102,7 @@ def gen_test(k=300, flatten=False):
         items = []
         for c in name_to_pubs_test[name]:  # one person
             for item in name_to_pubs_test[name][c]:
-                if data_cache[item] is None or lc.get(pid) is None:
+                if  item not in data_cache  or lc.get(item) is None:
                     continue
                 items.append(item)
         sampled_points = [items[p] for p in np.random.choice(len(items), k, replace=True)]
