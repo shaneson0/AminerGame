@@ -92,7 +92,7 @@ def gen_sna(k=300):
     return names, xs
 
 def gen_test(k=300, flatten=False):
-    name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_test_100.json')
+    name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_test.json')
     xs, ys = [], []
     names = []
     for name in name_to_pubs_test:
@@ -121,8 +121,8 @@ def gen_test(k=300, flatten=False):
 
 def run_rnn(k=300, seed=1106):
     name_to_pubs_train = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_train.json')
-    # test_names, test_x, test_y = gen_test(k)
-    test_names, test_x = gen_sna(k)
+    test_names, test_x, test_y = gen_test(k)
+    # test_names, test_x = gen_sna(k)
     np.random.seed(seed)
     clusters = []
     for domain in name_to_pubs_train.values():
@@ -136,11 +136,11 @@ def run_rnn(k=300, seed=1106):
             data_cache[pid] = lc.get(pid)
     model = create_model()
     # print(model.summary())
-    model.fit_generator(gen_train(clusters, k=300, batch_size=1000), steps_per_epoch=100, epochs=1000)
+    model.fit_generator(gen_train(clusters, k=300, batch_size=1000), steps_per_epoch=100, epochs=1000, validation_data=(test_x, test_y))
     kk = model.predict(test_x)
     wf = open(join(settings.OUT_DIR, 'n_clusters_rnn.txt'), 'w')
     for i, name in enumerate(test_names):
-        wf.write('{}\t{}\n'.format(name, kk[i][0]))
+        wf.write('{}\t{}\t{}\n'.format(name, kk[i][0],test_y[i]))
     wf.close()
 
 
