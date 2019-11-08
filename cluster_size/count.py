@@ -61,7 +61,7 @@ def sampler(clusters, k=300, batch_size=10, min=1, max=300, flatten=False):
         else:
             xs.append(np.stack(x))
         ys.append(num_clusters)
-    print (np.stack(xs), np.stack(ys))
+    print ( "sampler: ", np.stack(xs), np.stack(ys))
     return np.stack(xs), np.stack(ys)
 
 
