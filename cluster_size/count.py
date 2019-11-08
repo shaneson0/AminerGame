@@ -51,11 +51,11 @@ def sampler(clusters, k=300, batch_size=10, min=1, max=300, flatten=False):
         sampled_points = [items[p] for p in np.random.choice(len(items), k, replace=True)]
         x = []
         for p in sampled_points:
-            if p in data_cache:
-                x.append(data_cache[p])
-            else:
-                print("a")
-                x.append(lc.get(p))
+            # if p in data_cache:
+            #     x.append(data_cache[p])
+            # else:
+            #     print("a")
+            x.append(lc.get(p))
         if flatten:
             xs.append(np.sum(x, axis=0))
         else:
