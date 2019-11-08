@@ -61,6 +61,7 @@ def sampler(clusters, k=300, batch_size=10, min=1, max=300, flatten=False):
         else:
             xs.append(np.stack(x))
         ys.append(num_clusters)
+    print (np.stack(xs), np.stack(ys))
     return np.stack(xs), np.stack(ys)
 
 
@@ -97,9 +98,9 @@ def gen_test(k=300, flatten=False):
     name_to_pubs_test = data_utils.load_json(settings.GLOBAL_DATA_DIR, 'name_to_pubs_test.json')
     xs, ys = [], []
     names = []
-    print (name_to_pubs_test)
+    # print (name_to_pubs_test)
     for name in name_to_pubs_test:
-        print ("name: ", name)
+        # print ("name: ", name)
         names.append(name)
         num_clusters = len(name_to_pubs_test[name])
         x = []
@@ -115,7 +116,7 @@ def gen_test(k=300, flatten=False):
         sampled_points = [items[p] for p in np.random.choice(len(items), k, replace=True)]
         for p in sampled_points:
             x.append(lc.get(p))
-        print ("name: ", name,  "x: ", x)
+        # print ("name: ", name,  "x: ", x)
         if flatten:
             xs.append(np.sum(x, axis=0))
         else:
