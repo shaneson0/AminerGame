@@ -76,13 +76,14 @@ def gen_sna(k=300):
         x = []
         items = []
         for pid in name_to_pubs_test[name]:
-            items.append(pid)
+            if lc.get(pid) is not None:
+                items.append(pid)
 
         sampled_points = [items[p] for p in np.random.choice(len(items), k, replace=True)]
         for p in sampled_points:
             emb = lc.get(p)
-            print ("emb: len :", len(emb))
-            x.append(lc.get(p))
+            # print ("emb: len :", len(emb))
+            x.append(emb)
         xs.append(np.stack(x))
     xs = np.stack(xs)
     return names, xs
