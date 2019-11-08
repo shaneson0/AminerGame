@@ -148,6 +148,7 @@ def run_rnn(k=300, seed=1106):
     model = create_model()
     # print(model.summary())
     model.fit_generator(gen_train(clusters, k=300, batch_size=1000), steps_per_epoch=100, epochs=1000, validation_data=(test_x, test_y))
+    model.save(settings.OUT_DIR, "clusterSizeModel", "clusterSizeModel.h5")
     kk = model.predict(test_x)
     wf = open(join(settings.OUT_DIR, 'n_clusters_rnn.txt'), 'w')
     for i, name in enumerate(test_names):
