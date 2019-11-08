@@ -153,6 +153,7 @@ def run_rnn(k=300, seed=1106):
     for i, name in enumerate(test_names):
         wf.write('{}\t{}\t{}\n'.format(name, kk[i][0],test_y[i]))
     wf.close()
+    print (model.evaluate(test_x, test_y))
 
 
 if __name__ == '__main__':
